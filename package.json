@@ -1,0 +1,23 @@
+{
+  "name": "elasticpmt",
+  "version": "1.0.0",
+  "description": "Project management tool implemented using ElasticSearch",
+  "main": "index.js",
+  "dependencies": {
+    "vue-cli-plugin-vuetify": "^2.0.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mario996/ElasticPMT.git"
+  },
+  "author": "Mario Klisanic",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Mario996/ElasticPMT/issues"
+  },
+  "homepage": "https://github.com/Mario996/ElasticPMT#readme"
+}
