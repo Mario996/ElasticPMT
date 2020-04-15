@@ -5,8 +5,7 @@ Vue.use(VueRouter)
 
 const routes = [
     {
-        path: '/',
-        name: 'Home',
+        path: '*',
         component: () => import(/* webpackChunkName: "home" */ '../views/Home.vue')
     },
     {
@@ -22,6 +21,7 @@ const routes = [
 ]
 
 const router = new VueRouter({
+    mode: 'history',
     routes
 })
 

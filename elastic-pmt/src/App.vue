@@ -3,58 +3,52 @@
     <v-app-bar
       app
       color="primary"
-      dark
-    >
+      dark>
       <div class="d-flex align-center">
         <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
+          alt="ElasticPMT"
+          class="shrink"
           contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
-
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
+          height="60"
+          width="50"
+          :src="require('./assets/elasticsearch-logo.png')"
+          transition="scale-transition" />
       </div>
-
-      <v-spacer></v-spacer>
-
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
+      <v-toolbar-title class="toolbar__title">
+        lasticPMT
+      </v-toolbar-title>
+      <v-spacer />
+      <router-link to="home"
+                   class="navigation-link">
+        Requirements
+      </router-link>
+      <router-link to="about"
+                   class="navigation-link">
+        Tasks
+      </router-link>
     </v-app-bar>
-
     <v-content>
-      <HelloWorld/>
+      <v-container>
+        <router-view />
+      </v-container>
     </v-content>
   </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld'
 
 export default {
-  name: 'App',
-
-  components: {
-    HelloWorld
-  },
-
-  data: () => ({
+    name: 'App',
+    data: () => ({
     //
-  })
+    })
 }
 </script>
+
+<style>
+a.navigation-link{
+  color: white!important;
+  text-decoration: none;
+  padding-right: 10px;
+}
+</style>
