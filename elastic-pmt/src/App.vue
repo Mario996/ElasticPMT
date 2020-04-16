@@ -18,11 +18,11 @@
         lasticPMT
       </v-toolbar-title>
       <v-spacer />
-      <router-link to="home"
+      <router-link to="add-requirement"
                    class="navigation-link">
         Requirements
       </router-link>
-      <router-link to="about"
+      <router-link to="home"
                    class="navigation-link">
         Tasks
       </router-link>
