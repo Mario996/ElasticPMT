@@ -1,5 +1,6 @@
 ﻿using ElasticPMTServer.Models;
-using Elasticsearch.Net;
+using Nest;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,12 +10,65 @@ namespace ElasticPMTServer.Services
 {
     public class ElasticSearchService : IElasticSearchService
     {
-        public static ElasticLowLevelClient client = new ElasticLowLevelClient();
+        public static ElasticClient client = new ElasticClient();
 
-        public  StringResponse createRequirement(Requirement requirement)
+        public  IndexResponse createRequirement(Requirement requirement)
         {
-            var result = client.Index<StringResponse>("elasticpmt", PostData.Serializable(requirement));
-            return result;
+            if(checkIfIndexExists())
+            {
+                return client.Index(requirement, i => i.Index("elasticpmt"));
+            }
+            else
+            {
+                createIndex();
+                return client.Index(requirement, i => i.Index("elasticpmt"));
+            }
+        }
+
+        public ISearchResponse<Requirement> getRequirements()
+        {
+            return client.Search<Requirement>(s => s
+               .Index("elasticpmt")
+               .MatchAll()
+            );
+        }
+
+        public ISearchResponse<Requirement> getRequirementById(string id)
+        {
+            return client.Search<Requirement>(s => s
+               .Index("elasticpmt")
+               .Query(q => q
+                  .Ids(c => c
+                    .Values(id)
+                    )
+               )
+            );
+        }
+
+        public bool checkIfIndexExists()
+        {
+            return client.Indices.Exists("elasticpmt").Exists;
+        }
+
+        public void createIndex()
+        {
+            client.Indices.Create("elasticpmt", c => c
+                        .Settings(s => s
+                            .NumberOfShards(1)
+                        )
+                        .Map(m => m
+                            .Properties(p => p
+                                .Text(t => t
+                                    .Name("requirement_id")
+                                    .Name("requirement_version")
+                                    .Name("requirement_description")
+                                    .Name("requirement_rationale")
+                                    .Name("requirement_type")
+                                    .Name("requirement_status")
+                                )
+                            )
+                        )
+            );
         }
     }
 }

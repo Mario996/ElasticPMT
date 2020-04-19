@@ -22,7 +22,7 @@
                    class="navigation-link">
         Requirements
       </router-link>
-      <router-link to="home"
+      <router-link to="list-requirement"
                    class="navigation-link">
         Tasks
       </router-link>

@@ -18,6 +18,11 @@ const routes = [
         name: 'add-requirement',
         component: () => import(/* webpackChunkName: "about" */ '../views/AddRequirementView.vue')
     },
+    {
+        path: '/list-requirement',
+        name: 'list-requirement',
+        component: () => import(/* webpackChunkName: "about" */ '../views/ListRequirementView.vue')
+    },
 ]
 
 const router = new VueRouter({

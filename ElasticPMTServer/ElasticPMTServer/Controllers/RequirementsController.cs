@@ -24,16 +24,18 @@ namespace ElasticPMTServer.Controllers
 
         // GET: api/Requirements
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IActionResult GetAllRequirements()
         {
-            return new string[] { "value1", "value2" };
+            var result = _elasticSearchService.getRequirements().Hits;
+            return Ok(result);
         }
 
         // GET: api/Requirements/5
-        [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
+        [HttpGet("{id}")]
+        public IActionResult GetRequirementById(string id)
         {
-            return "value";
+            var result = _elasticSearchService.getRequirementById(id).Hits; ;
+            return Ok(result);
         }
 
         // POST: requirements
@@ -41,7 +43,7 @@ namespace ElasticPMTServer.Controllers
         public IActionResult createRequirement([FromBody] Requirement requirement)
         {
             var result = _elasticSearchService.createRequirement(requirement);
-            return StatusCode(result.HttpStatusCode.Value);
+            return Ok();
         }
 
         // PUT: api/Requirements/5
