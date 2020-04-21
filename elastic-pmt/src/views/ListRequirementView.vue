@@ -6,8 +6,12 @@
       {{ requirement.source.requirement_version }}
       {{ requirement.source.requirement_status }}
       <v-btn
-        @click="getThisRequirement(requirement.id)">
-        GET
+        @click="updateRequirement(requirement.id)">
+        UPDATE
+      </v-btn>
+      <v-btn
+        @click="deleteRequirement(requirement.id)">
+        DELETE
       </v-btn>
     </li>
   </ul>
@@ -15,6 +19,7 @@
 
 <script>
 import { requirementsService } from '../services/requirements-service'
+import router from '../router/index'
 
 export default {
     components: {
@@ -32,8 +37,14 @@ export default {
     methods: {
         clear () {
         },
-        getThisRequirement (id) {
+        updateRequirement (id) {
             requirementsService.getRequirementById(id)
+                .then((response) => {
+                    router.push({ name: 'add-requirement', params: { requirement: response[0].source } })
+                })
+        },
+        deleteRequirement (id) {
+            requirementsService.deleteRequirement(id)
                 .then((response) => {
                     console.log(response)
                 })

@@ -41,8 +41,21 @@ async function getRequirementById (id) {
         .then(response => response.json())
 }
 
+async function deleteRequirement (id) {
+    const requestOptions = {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }
+
+    return fetch(`https://localhost:44332/requirements/${id}`, requestOptions)
+        .then(response => response.json())
+}
+
 export const requirementsService = {
     createRequirement,
     getAllRequirements,
     getRequirementById,
+    deleteRequirement,
 }

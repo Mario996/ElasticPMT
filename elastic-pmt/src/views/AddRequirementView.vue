@@ -105,6 +105,9 @@ export default {
         ValidationProvider,
         ValidationObserver,
     },
+    props: {
+        requirement: { type: Object, default: () => {} },
+    },
     data: () => ({
         requirementId: '',
         requirementVersion: '',
@@ -113,7 +116,6 @@ export default {
         requirementType: '',
         requirementStatus: '',
     }),
-
     methods: {
         submitForm (formValue) {
             this.$refs.observer.validate()

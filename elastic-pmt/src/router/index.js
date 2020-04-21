@@ -16,7 +16,8 @@ const routes = [
     {
         path: '/add-requirement',
         name: 'add-requirement',
-        component: () => import(/* webpackChunkName: "about" */ '../views/AddRequirementView.vue')
+        component: () => import(/* webpackChunkName: "about" */ '../views/AddRequirementView.vue'),
+        props: true,
     },
     {
         path: '/list-requirement',
