@@ -54,8 +54,10 @@ namespace ElasticPMTServer.Controllers
 
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult deleteRequirement(string id)
         {
+            var result = _elasticSearchService.deleteRequirement(id);
+            return Ok(result);
         }
     }
 }

@@ -10,9 +10,11 @@ namespace ElasticPMTServer.Services
 {
     public class ElasticSearchService : IElasticSearchService
     {
-        public static ElasticClient client = new ElasticClient();
+        public static ConnectionSettings settings = new ConnectionSettings().DefaultMappingFor<Requirement>(m => m
+                                                                    .IndexName("elasticpmt"));
+        public static ElasticClient client = new ElasticClient(settings);
 
-        public  IndexResponse createRequirement(Requirement requirement)
+        public IndexResponse createRequirement(Requirement requirement)
         {
             if(checkIfIndexExists())
             {
@@ -28,7 +30,6 @@ namespace ElasticPMTServer.Services
         public ISearchResponse<Requirement> getRequirements()
         {
             return client.Search<Requirement>(s => s
-               .Index("elasticpmt")
                .MatchAll()
             );
         }
@@ -36,13 +37,17 @@ namespace ElasticPMTServer.Services
         public ISearchResponse<Requirement> getRequirementById(string id)
         {
             return client.Search<Requirement>(s => s
-               .Index("elasticpmt")
                .Query(q => q
                   .Ids(c => c
                     .Values(id)
                     )
                )
             );
+        }
+
+        public DeleteResponse deleteRequirement(string id)
+        {
+            return client.Delete<Requirement>(id);
         }
 
         public bool checkIfIndexExists()

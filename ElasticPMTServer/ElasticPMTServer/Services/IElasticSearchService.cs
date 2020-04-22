@@ -15,5 +15,6 @@ namespace ElasticPMTServer.Services
         ISearchResponse<Requirement> getRequirementById(string id);
         bool checkIfIndexExists();
         void createIndex();
+        DeleteResponse deleteRequirement(string id);
     }
 }
