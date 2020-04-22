@@ -22,7 +22,7 @@ namespace ElasticPMTServer.Controllers
             _elasticSearchService = elasticSearchService;
         }
 
-        // GET: api/Requirements
+        // GET: requirements
         [HttpGet]
         public IActionResult GetAllRequirements()
         {
@@ -30,11 +30,11 @@ namespace ElasticPMTServer.Controllers
             return Ok(result);
         }
 
-        // GET: api/Requirements/5
+        // GET: requirements/{id}
         [HttpGet("{id}")]
         public IActionResult GetRequirementById(string id)
         {
-            var result = _elasticSearchService.getRequirementById(id).Hits; ;
+            var result = _elasticSearchService.getRequirementById(id);
             return Ok(result);
         }
 
@@ -46,13 +46,15 @@ namespace ElasticPMTServer.Controllers
             return Ok();
         }
 
-        // PUT: api/Requirements/5
+        // PUT: requirements/{id}
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public IActionResult updateRequirement(string id, [FromBody] Requirement requirement)
         {
+            var result = _elasticSearchService.updateRequirement(id, requirement);
+            return Ok(result);
         }
 
-        // DELETE: api/ApiWithActions/5
+        // DELETE: requirements/{id}
         [HttpDelete("{id}")]
         public IActionResult deleteRequirement(string id)
         {

@@ -82,6 +82,7 @@
 import { required, max, min } from 'vee-validate/dist/rules'
 import { extend, ValidationObserver, ValidationProvider, setInteractionMode } from 'vee-validate'
 import { requirementsService } from '../services/requirements-service'
+import router from '../router/index'
 
 setInteractionMode('eager')
 
@@ -107,6 +108,7 @@ export default {
     },
     props: {
         requirement: { type: Object, default: () => {} },
+        documentId: { type: String, default: '' }
     },
     data: () => ({
         requirementId: '',
@@ -115,16 +117,39 @@ export default {
         requirementDescription: '',
         requirementType: '',
         requirementStatus: '',
+        updateMode: false
     }),
+    created () {
+        if (this.requirement !== undefined) {
+            this.updateMode = true
+            this.requirementId = this.requirement.requirement_id
+            this.requirementVersion = this.requirement.requirement_version
+            this.requirementRationale = this.requirement.requirement_rationale
+            this.requirementDescription = this.requirement.requirement_description
+            this.requirementType = this.requirement.requirement_type
+            this.requirementStatus = this.requirement.requirement_status
+        }
+    },
     methods: {
-        submitForm (formValue) {
+        submitForm () {
             this.$refs.observer.validate()
-            requirementsService.createRequirement({ requirementId: this.requirementId,
-                requirementVersion: this.requirementVersion,
-                requirementRationale: this.requirementRationale,
-                requirementDescription: this.requirementDescription,
-                requirementType: this.requirementType,
-                requirementStatus: this.requirementStatus })
+            if (this.updateMode) {
+                requirementsService.updateRequirement({ requirementId: this.requirementId,
+                    requirementVersion: this.requirementVersion,
+                    requirementRationale: this.requirementRationale,
+                    requirementDescription: this.requirementDescription,
+                    requirementType: this.requirementType,
+                    requirementStatus: this.requirementStatus }, this.documentId)
+                router.push('/list-requirement')
+            } else {
+                requirementsService.createRequirement({ requirementId: this.requirementId,
+                    requirementVersion: this.requirementVersion,
+                    requirementRationale: this.requirementRationale,
+                    requirementDescription: this.requirementDescription,
+                    requirementType: this.requirementType,
+                    requirementStatus: this.requirementStatus })
+                router.push('/list-requirement')
+            }
         },
         clear () {
             this.requirementId = ''

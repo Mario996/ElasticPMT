@@ -12,7 +12,8 @@ namespace ElasticPMTServer.Services
     {
         IndexResponse createRequirement(Requirement requirement);
         ISearchResponse<Requirement> getRequirements();
-        ISearchResponse<Requirement> getRequirementById(string id);
+        GetResponse<Requirement> getRequirementById(string id);
+        UpdateResponse<Requirement> updateRequirement(string id, Requirement requirement);
         bool checkIfIndexExists();
         void createIndex();
         DeleteResponse deleteRequirement(string id);

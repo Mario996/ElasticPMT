@@ -14,8 +14,8 @@ const routes = [
         component: () => import(/* webpackChunkName: "home" */ '../views/Home.vue')
     },
     {
-        path: '/add-requirement',
-        name: 'add-requirement',
+        path: '/requirement',
+        name: 'requirement',
         component: () => import(/* webpackChunkName: "about" */ '../views/AddRequirementView.vue'),
         props: true,
     },

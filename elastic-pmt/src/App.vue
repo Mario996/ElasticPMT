@@ -18,7 +18,7 @@
         lasticPMT
       </v-toolbar-title>
       <v-spacer />
-      <router-link to="add-requirement"
+      <router-link to="requirement"
                    class="navigation-link">
         Requirements
       </router-link>

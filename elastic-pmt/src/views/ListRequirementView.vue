@@ -40,10 +40,11 @@ export default {
         updateRequirement (id) {
             requirementsService.getRequirementById(id)
                 .then((response) => {
-                    router.push({ name: 'add-requirement', params: { requirement: response[0].source } })
+                    router.push({ name: 'requirement', params: { requirement: response.source, documentId: response.id } })
                 })
         },
         deleteRequirement (id) {
+            this.requirements = this.requirements.filter(x => x.id !== id)
             requirementsService.deleteRequirement(id)
                 .then((response) => {
                     console.log(response)

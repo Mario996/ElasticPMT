@@ -18,31 +18,36 @@ namespace ElasticPMTServer.Services
         {
             if(checkIfIndexExists())
             {
-                return client.Index(requirement, i => i.Index("elasticpmt"));
+                return client.Index(requirement, i => i
+                .Refresh(Elasticsearch.Net.Refresh.True));
             }
             else
             {
                 createIndex();
-                return client.Index(requirement, i => i.Index("elasticpmt"));
+                return client.Index(requirement, i => i
+                .Refresh(Elasticsearch.Net.Refresh.True));
             }
+        }
+
+        public UpdateResponse<Requirement> updateRequirement(string id, Requirement requirement)
+        {
+            return client.Update<Requirement>(id, u => u
+                    .Doc(requirement)
+                    .Refresh(Elasticsearch.Net.Refresh.True)
+            );
         }
 
         public ISearchResponse<Requirement> getRequirements()
         {
+            client.Indices.Refresh();
             return client.Search<Requirement>(s => s
                .MatchAll()
             );
         }
 
-        public ISearchResponse<Requirement> getRequirementById(string id)
+        public GetResponse<Requirement> getRequirementById(string id)
         {
-            return client.Search<Requirement>(s => s
-               .Query(q => q
-                  .Ids(c => c
-                    .Values(id)
-                    )
-               )
-            );
+            return client.Get<Requirement>(id);
         }
 
         public DeleteResponse deleteRequirement(string id)
