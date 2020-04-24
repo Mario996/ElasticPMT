@@ -1,29 +1,20 @@
 <template>
-  <ul id="example-1">
-    <li v-for="requirement in requirements"
-        :key="requirement.requirement_id">
-      {{ requirement.source.requirement_id }}
-      {{ requirement.source.requirement_version }}
-      {{ requirement.source.requirement_status }}
-      <v-btn
-        @click="updateRequirement(requirement.id)">
-        UPDATE
-      </v-btn>
-      <v-btn
-        @click="deleteRequirement(requirement.id)">
-        DELETE
-      </v-btn>
-    </li>
-  </ul>
+  <v-container>
+    <RequirementPreview v-for="requirement in requirements"
+                        :key="requirement.requirement_id"
+                        :requirement="requirement"
+                        @delete-requirement="deleteRequirement" />
+  </v-container>
 </template>
 
 <script>
 import { requirementsService } from '../services/requirements-service'
 import router from '../router/index'
+import RequirementPreview from '../components/RequirementPreview'
 
 export default {
     components: {
-
+        RequirementPreview,
     },
     data: () => ({
         requirements: []
@@ -31,7 +22,12 @@ export default {
     created () {
         requirementsService.getAllRequirements()
             .then((response) => {
-                this.requirements = response
+                this.requirements = response.map(x => {
+                    return {
+                        id: x.id,
+                        objectValue: x.source,
+                    }
+                })
             })
     },
     methods: {
