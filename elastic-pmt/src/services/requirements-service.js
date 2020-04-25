@@ -29,7 +29,7 @@ async function createRequirement (requirement) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            requirement_id: requirement.requirementId,
+            requirement_name: requirement.requirementName,
             requirement_version: requirement.requirementVersion,
             requirement_description: requirement.requirementDescription,
             requirement_rationale: requirement.requirementRationale,
@@ -48,7 +48,7 @@ async function updateRequirement (requirement, id) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            requirement_id: requirement.requirementId,
+            requirement_name: requirement.requirementName,
             requirement_version: requirement.requirementVersion,
             requirement_description: requirement.requirementDescription,
             requirement_rationale: requirement.requirementRationale,

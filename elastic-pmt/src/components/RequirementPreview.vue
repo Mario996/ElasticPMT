@@ -5,7 +5,7 @@
     <v-card-text class="px-2 pt-2 pb-0">
       <v-row justify="center">
         <h3 class="mb-2 text--primary">
-          {{ requirement.objectValue.requirement_id }}
+          {{ requirement.objectValue.requirement_name }}
         </h3>
       </v-row>
       <p class="mb-2 text--primary">

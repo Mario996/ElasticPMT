@@ -1,81 +1,96 @@
 <template>
-  <ValidationObserver ref="observer">
-    <form ref="requirementsForm">
-      <ValidationProvider v-slot="{ errors }"
-                          name="Requirement ID"
-                          rules="required|max:30">
-        <v-text-field
-          v-model="requirementId"
-          :error-messages="errors"
-          label="Requirement ID"
-          required />
-      </ValidationProvider>
-      <ValidationProvider v-slot="{ errors }"
-                          name="Requirement version"
-                          rules="required|max:10">
-        <v-text-field
-          v-model="requirementVersion"
-          :error-messages="errors"
-          label="Requirement version"
-          required />
-      </ValidationProvider>
-      <ValidationProvider v-slot="{ errors }"
-                          name="Requirement description"
-                          rules="required|max:500|min:10">
-        <v-textarea
-          v-model="requirementDescription"
-          solo
-          name="input-7-4"
-          label="Requirement description"
-          required
-          :error-messages="errors"
-          :counter="500" />
-      </ValidationProvider>
-      <ValidationProvider v-slot="{ errors }"
-                          name="Requirement rationale"
-                          rules="required|max:500|min:10">
-        <v-textarea
-          v-model="requirementRationale"
-          solo
-          name="input-7-4"
-          label="Requirement rationale"
-          :error-messages="errors"
-          :counter="500" />
-      </ValidationProvider>
-      <ValidationProvider v-slot="{ errors }"
-                          name="Requirement type"
-                          rules="required">
-        <v-radio-group v-model="requirementType"
-                       row
-                       :error-messages="errors"
-                       label="Requirement type:">
-          <v-radio label="Functional requirement"
-                   value="Functional requirement" />
-          <v-radio label="Nonfunctional requirement"
-                   value="Nonfunctional requirement" />
-        </v-radio-group>
-      </ValidationProvider>
-      <ValidationProvider v-slot="{ errors }"
-                          name="Requirement status"
-                          rules="required">
-        <v-radio-group v-model="requirementStatus"
-                       row
-                       :error-messages="errors"
-                       label="Requirement status:">
-          <v-radio label="Waiting for revision"
-                   value="Waiting for revision" />
-          <v-radio label="Approved"
-                   value="Approved" />
-          <v-radio label="Declined"
-                   value="Decilned" />
-        </v-radio-group>
-      </ValidationProvider>
-      <v-btn class="mr-4"
-             @click="submitForm">
-        submit
-      </v-btn>
-    </form>
-  </ValidationObserver>
+  <v-container
+    fluid
+    class="fill-height">
+    <v-row align="center"
+           justify="center">
+      <v-col cols="12"
+             md="6"
+             lg="6">
+        <ValidationObserver ref="observer">
+          <form ref="requirementsForm">
+            <ValidationProvider v-slot="{ errors }"
+                                name="Requirement name"
+                                rules="required|max:30">
+              <v-text-field
+                v-model="requirementName"
+                :error-messages="errors"
+                label="Requirement name"
+                required />
+            </ValidationProvider>
+            <ValidationProvider v-slot="{ errors }"
+                                name="Requirement version"
+                                rules="required|max:10">
+              <v-text-field
+                v-model="requirementVersion"
+                :error-messages="errors"
+                label="Requirement version"
+                required />
+            </ValidationProvider>
+            <ValidationProvider v-slot="{ errors }"
+                                name="Requirement description"
+                                rules="required|max:500|min:10">
+              <v-textarea
+                v-model="requirementDescription"
+                solo
+                name="input-7-4"
+                label="Requirement description"
+                required
+                :error-messages="errors"
+                :counter="500" />
+            </ValidationProvider>
+            <ValidationProvider v-slot="{ errors }"
+                                name="Requirement rationale"
+                                rules="required|max:500|min:10">
+              <v-textarea
+                v-model="requirementRationale"
+                solo
+                name="input-7-4"
+                label="Requirement rationale"
+                :error-messages="errors"
+                :counter="500" />
+            </ValidationProvider>
+            <ValidationProvider v-slot="{ errors }"
+                                name="Requirement type"
+                                rules="required">
+              <v-radio-group v-model="requirementType"
+                             row
+                             :error-messages="errors"
+                             label="Requirement type:">
+                <v-radio label="Functional requirement"
+                         value="Functional requirement" />
+                <v-radio label="Nonfunctional requirement"
+                         value="Nonfunctional requirement" />
+              </v-radio-group>
+            </ValidationProvider>
+            <ValidationProvider v-slot="{ errors }"
+                                name="Requirement status"
+                                rules="required">
+              <v-radio-group v-model="requirementStatus"
+                             row
+                             :error-messages="errors"
+                             label="Requirement status:">
+                <v-radio label="Waiting for revision"
+                         value="Waiting for revision" />
+                <v-radio label="Approved"
+                         value="Approved" />
+                <v-radio label="Declined"
+                         value="Decilned" />
+              </v-radio-group>
+            </ValidationProvider>
+            <v-row justify="center">
+              <v-btn class="mr-4"
+                     width="300"
+                     color="primary"
+                     @click="submitForm">
+                {{ mode }}
+              </v-btn>
+            </v-row>
+          </form>
+        </ValidationObserver>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -111,18 +126,20 @@ export default {
         documentId: { type: String, default: '' }
     },
     data: () => ({
-        requirementId: '',
+        requirementName: '',
         requirementVersion: '',
         requirementRationale: '',
         requirementDescription: '',
         requirementType: '',
         requirementStatus: '',
-        updateMode: false
+        updateMode: false,
+        mode: 'CREATE',
     }),
     created () {
         if (this.requirement !== undefined) {
             this.updateMode = true
-            this.requirementId = this.requirement.requirement_id
+            this.mode = 'UPDATE'
+            this.requirementName = this.requirement.requirement_name
             this.requirementVersion = this.requirement.requirement_version
             this.requirementRationale = this.requirement.requirement_rationale
             this.requirementDescription = this.requirement.requirement_description
@@ -134,7 +151,7 @@ export default {
         submitForm () {
             this.$refs.observer.validate()
             if (this.updateMode) {
-                requirementsService.updateRequirement({ requirementId: this.requirementId,
+                requirementsService.updateRequirement({ requirementName: this.requirementName,
                     requirementVersion: this.requirementVersion,
                     requirementRationale: this.requirementRationale,
                     requirementDescription: this.requirementDescription,
@@ -142,7 +159,7 @@ export default {
                     requirementStatus: this.requirementStatus }, this.documentId)
                 router.push('/list-requirement')
             } else {
-                requirementsService.createRequirement({ requirementId: this.requirementId,
+                requirementsService.createRequirement({ requirementName: this.requirementName,
                     requirementVersion: this.requirementVersion,
                     requirementRationale: this.requirementRationale,
                     requirementDescription: this.requirementDescription,
@@ -152,7 +169,7 @@ export default {
             }
         },
         clear () {
-            this.requirementId = ''
+            this.requirementName = ''
             this.requirementVersion = ''
             this.requirementRationale = ''
             this.requirementDescription = ''

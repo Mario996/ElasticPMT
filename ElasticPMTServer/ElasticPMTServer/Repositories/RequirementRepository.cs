@@ -1,17 +1,14 @@
 ﻿using ElasticPMTServer.Models;
 using Nest;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace ElasticPMTServer.Services
+namespace ElasticPMTServer.Repositories
 {
-    public class ElasticSearchService : IElasticSearchService
+    public class RequirementRepository : IRequirementRepository
     {
-        public static ConnectionSettings settings = new ConnectionSettings().DefaultMappingFor<Requirement>(m => m
-                                                                    .IndexName("elasticpmt"));
+        public static ConnectionSettings settings = new ConnectionSettings()
+                                                        .DefaultMappingFor<Requirement>(m => m
+                                                        .IndexName("requirements"));
+
         public static ElasticClient client = new ElasticClient(settings);
 
         public IndexResponse createRequirement(Requirement requirement)
@@ -23,9 +20,13 @@ namespace ElasticPMTServer.Services
             }
             else
             {
-                createIndex();
-                return client.Index(requirement, i => i
-                .Refresh(Elasticsearch.Net.Refresh.True));
+                var response = createIndex();
+                if(response.IsValid)
+                {
+                    return client.Index(requirement, i => i
+                        .Refresh(Elasticsearch.Net.Refresh.True));
+                }
+                return null;
             }
         }
 
@@ -57,19 +58,19 @@ namespace ElasticPMTServer.Services
 
         public bool checkIfIndexExists()
         {
-            return client.Indices.Exists("elasticpmt").Exists;
+            return client.Indices.Exists("requirements").Exists;
         }
 
-        public void createIndex()
+        public CreateIndexResponse createIndex()
         {
-            client.Indices.Create("elasticpmt", c => c
+            return client.Indices.Create("requirements", c => c
                         .Settings(s => s
                             .NumberOfShards(1)
                         )
                         .Map(m => m
                             .Properties(p => p
                                 .Text(t => t
-                                    .Name("requirement_id")
+                                    .Name("requirement_name")
                                     .Name("requirement_version")
                                     .Name("requirement_description")
                                     .Name("requirement_rationale")

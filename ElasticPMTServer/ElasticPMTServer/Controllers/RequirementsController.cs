@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using ElasticPMTServer.Models;
-using ElasticPMTServer.Services;
-using Elasticsearch.Net;
-using Microsoft.AspNetCore.Http;
+﻿using ElasticPMTServer.Models;
+using ElasticPMTServer.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ElasticPMTServer.Controllers
@@ -15,18 +9,18 @@ namespace ElasticPMTServer.Controllers
     public class RequirementsController : ControllerBase
     {
 
-        private readonly IElasticSearchService _elasticSearchService;
+        private readonly IRequirementRepository _requirementRepository;
 
-        public RequirementsController(IElasticSearchService elasticSearchService)
+        public RequirementsController(IRequirementRepository requirementRepository)
         { 
-            _elasticSearchService = elasticSearchService;
+            _requirementRepository = requirementRepository;
         }
 
         // GET: requirements
         [HttpGet]
         public IActionResult GetAllRequirements()
         {
-            var result = _elasticSearchService.getRequirements().Hits;
+            var result = _requirementRepository.getRequirements().Hits;
             return Ok(result);
         }
 
@@ -34,7 +28,7 @@ namespace ElasticPMTServer.Controllers
         [HttpGet("{id}")]
         public IActionResult GetRequirementById(string id)
         {
-            var result = _elasticSearchService.getRequirementById(id);
+            var result = _requirementRepository.getRequirementById(id);
             return Ok(result);
         }
 
@@ -42,15 +36,19 @@ namespace ElasticPMTServer.Controllers
         [HttpPost]
         public IActionResult createRequirement([FromBody] Requirement requirement)
         {
-            var result = _elasticSearchService.createRequirement(requirement);
-            return Ok();
+            var result = _requirementRepository.createRequirement(requirement);
+            if(result == null)
+            {
+                return BadRequest();
+            }
+            return Ok(result);
         }
 
         // PUT: requirements/{id}
         [HttpPut("{id}")]
         public IActionResult updateRequirement(string id, [FromBody] Requirement requirement)
         {
-            var result = _elasticSearchService.updateRequirement(id, requirement);
+            var result = _requirementRepository.updateRequirement(id, requirement);
             return Ok(result);
         }
 
@@ -58,7 +56,7 @@ namespace ElasticPMTServer.Controllers
         [HttpDelete("{id}")]
         public IActionResult deleteRequirement(string id)
         {
-            var result = _elasticSearchService.deleteRequirement(id);
+            var result = _requirementRepository.deleteRequirement(id);
             return Ok(result);
         }
     }

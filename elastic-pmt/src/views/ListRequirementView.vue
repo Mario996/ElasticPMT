@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <RequirementPreview v-for="requirement in requirements"
-                        :key="requirement.requirement_id"
+                        :key="requirement.requirement_name"
                         :requirement="requirement"
                         @delete-requirement="deleteRequirement" />
   </v-container>
