@@ -48,6 +48,7 @@ namespace ElasticPMTServer.Repositories
 
         public GetResponse<Requirement> getRequirementById(string id)
         {
+            client.Indices.Refresh();
             return client.Get<Requirement>(id);
         }
 
@@ -63,21 +64,10 @@ namespace ElasticPMTServer.Repositories
 
         public CreateIndexResponse createIndex()
         {
+            // at the moment I let ES create mapping according to my object, may change later
             return client.Indices.Create("requirements", c => c
                         .Settings(s => s
                             .NumberOfShards(1)
-                        )
-                        .Map(m => m
-                            .Properties(p => p
-                                .Text(t => t
-                                    .Name("requirement_name")
-                                    .Name("requirement_version")
-                                    .Name("requirement_description")
-                                    .Name("requirement_rationale")
-                                    .Name("requirement_type")
-                                    .Name("requirement_status")
-                                )
-                            )
                         )
             );
         }

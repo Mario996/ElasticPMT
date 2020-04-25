@@ -22,20 +22,7 @@ namespace ElasticPMTServer.Repositories
                      .Settings(s => s
                          .NumberOfShards(1)
                      )
-                     .Map(m => m
-                         .Properties(p => p
-                             .Text(t => t
-                                 .Name("task_summary")
-                                 .Name("task_component")
-                                 .Name("task_type")
-                                 .Name("task_priority")
-                                 .Name("task_assignee")
-                                 .Name("task_environment")
-                                 .Name("task_description")
-                             )
-                         )
-                     )
-         );
+            );
         }
 
         public IndexResponse createTask(Task task)
@@ -43,7 +30,7 @@ namespace ElasticPMTServer.Repositories
             if (checkIfIndexExists())
             {
                 return client.Index(task, i => i
-                .Refresh(Elasticsearch.Net.Refresh.True));
+                    .Refresh(Elasticsearch.Net.Refresh.True));
             }
             else
             {
@@ -64,6 +51,7 @@ namespace ElasticPMTServer.Repositories
 
         public GetResponse<Task> getTaskById(string id)
         {
+            client.Indices.Refresh();
             return client.Get<Task>(id);
         }
 
@@ -80,7 +68,7 @@ namespace ElasticPMTServer.Repositories
             return client.Update<Task>(id, u => u
                  .Doc(task)
                  .Refresh(Elasticsearch.Net.Refresh.True)
-         );
+            );
         }
     }
 }

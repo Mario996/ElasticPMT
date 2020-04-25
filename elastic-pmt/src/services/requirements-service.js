@@ -29,12 +29,12 @@ async function createRequirement (requirement) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            requirement_name: requirement.requirementName,
-            requirement_version: requirement.requirementVersion,
-            requirement_description: requirement.requirementDescription,
-            requirement_rationale: requirement.requirementRationale,
-            requirement_type: requirement.requirementType,
-            requirement_status: requirement.requirementStatus,
+            Name: requirement.requirementName,
+            Version: requirement.requirementVersion,
+            Descripton: requirement.requirementDescription,
+            Rationale: requirement.requirementRationale,
+            Type: requirement.requirementType,
+            Status: requirement.requirementStatus,
         }),
     }
 
@@ -48,12 +48,12 @@ async function updateRequirement (requirement, id) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            requirement_name: requirement.requirementName,
-            requirement_version: requirement.requirementVersion,
-            requirement_description: requirement.requirementDescription,
-            requirement_rationale: requirement.requirementRationale,
-            requirement_type: requirement.requirementType,
-            requirement_status: requirement.requirementStatus,
+            Name: requirement.requirementName,
+            Version: requirement.requirementVersion,
+            Descripton: requirement.requirementDescription,
+            Rationale: requirement.requirementRationale,
+            Type: requirement.requirementType,
+            Status: requirement.requirementStatus,
         }),
     }
 

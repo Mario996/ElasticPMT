@@ -5,17 +5,14 @@
     <v-card-text class="px-2 pt-2 pb-0">
       <v-row justify="center">
         <h3 class="mb-2 text--primary">
-          {{ requirement.objectValue.name }}
+          {{ task.objectValue.summary }}
         </h3>
       </v-row>
       <p class="mb-2 text--primary">
-        Version: {{ requirement.objectValue.version }}
+        Priority: {{ task.objectValue.priority }}
       </p>
       <p class="mb-2 text--primary">
-        Type: {{ requirement.objectValue.type }}
-      </p>
-      <p class="text--primary mb-0">
-        Status: {{ requirement.objectValue.status }}
+        Assignee: {{ task.objectValue.assignee }}
       </p>
     </v-card-text>
     <v-card-actions class="text-center">
@@ -26,7 +23,7 @@
           </v-btn>
         </v-col>
         <v-col cols="6">
-          <v-btn @click="deleteRequirement">
+          <v-btn @click="deleteTask">
             Delete
           </v-btn>
         </v-col>
@@ -40,16 +37,16 @@ import router from '../router/index'
 
 export default {
     props: {
-        requirement: { type: Object, default: () => {} },
+        task: { type: Object, default: () => {} },
     },
     data: () => ({
     }),
     methods: {
         openDetails () {
-            router.push({ name: 'requirement', params: { requirement: this.requirement.objectValue, documentId: this.requirement.id } })
+            router.push({ name: 'task', params: { task: this.task.objectValue, documentId: this.task.id } })
         },
-        deleteRequirement () {
-            this.$emit('delete-requirement', this.requirement.id)
+        deleteTask () {
+            this.$emit('delete-task', this.task.id)
         }
     },
 }

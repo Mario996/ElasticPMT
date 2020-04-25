@@ -32,14 +32,13 @@
           <v-list-item
             v-for="(item, index) in items"
             :key="index"
-            @click="pickOption(item)">
+            @click="pickOption(item, 'requirement')">
             <v-list-item-title>{{ item }}</v-list-item-title>
           </v-list-item>
         </v-list>
       </v-menu>
       <v-menu offset-y>
-        <template v-slot:activator="{ on }"
-                  class="r-2">
+        <template v-slot:activator="{ on }">
           <v-btn
             dark
             text
@@ -52,7 +51,7 @@
           <v-list-item
             v-for="(item, index) in items"
             :key="index"
-            @click="pickOption(item)">
+            @click="pickOption(item, 'task')">
             <v-list-item-title>{{ item }}</v-list-item-title>
           </v-list-item>
         </v-list>
@@ -76,11 +75,15 @@ export default {
         ]
     }),
     methods: {
-        pickOption (option) {
-            if (option === 'Create') {
+        pickOption (option, menu) {
+            if (option === 'Create' && menu === 'requirement') {
                 router.push('/requirement')
+            } else if (option === 'List' && menu === 'requirement') {
+                router.push('/list-requirements')
+            } else if (option === 'Create' && menu === 'task') {
+                router.push('/task')
             } else {
-                router.push('/list-requirement')
+                router.push('/list-tasks')
             }
         }
     }

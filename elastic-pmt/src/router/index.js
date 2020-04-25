@@ -25,9 +25,20 @@ const routes = [
         props: true,
     },
     {
-        path: '/list-requirement',
-        name: 'list-requirement',
+        path: '/list-requirements',
+        name: 'list-requirements',
         component: () => import(/* webpackChunkName: "about" */ '../views/ListRequirementView.vue')
+    },
+    {
+        path: '/task',
+        name: 'task',
+        component: () => import(/* webpackChunkName: "about" */ '../views/AddTaskView.vue'),
+        props: true,
+    },
+    {
+        path: '/list-tasks',
+        name: 'list-tasks',
+        component: () => import(/* webpackChunkName: "about" */ '../views/ListTaskView.vue')
     },
 ]
 

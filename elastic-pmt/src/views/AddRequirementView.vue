@@ -8,7 +8,7 @@
              md="6"
              lg="6">
         <ValidationObserver ref="observer">
-          <form ref="requirementsForm">
+          <form>
             <ValidationProvider v-slot="{ errors }"
                                 name="Requirement name"
                                 rules="required|max:30">
@@ -75,7 +75,7 @@
                 <v-radio label="Approved"
                          value="Approved" />
                 <v-radio label="Declined"
-                         value="Decilned" />
+                         value="Declined" />
               </v-radio-group>
             </ValidationProvider>
             <v-row justify="center">
@@ -139,12 +139,12 @@ export default {
         if (this.requirement !== undefined) {
             this.updateMode = true
             this.mode = 'UPDATE'
-            this.requirementName = this.requirement.requirement_name
-            this.requirementVersion = this.requirement.requirement_version
-            this.requirementRationale = this.requirement.requirement_rationale
-            this.requirementDescription = this.requirement.requirement_description
-            this.requirementType = this.requirement.requirement_type
-            this.requirementStatus = this.requirement.requirement_status
+            this.requirementName = this.requirement.name
+            this.requirementVersion = this.requirement.version
+            this.requirementRationale = this.requirement.rationale
+            this.requirementDescription = this.requirement.description
+            this.requirementType = this.requirement.type
+            this.requirementStatus = this.requirement.status
         }
     },
     methods: {
@@ -157,7 +157,7 @@ export default {
                     requirementDescription: this.requirementDescription,
                     requirementType: this.requirementType,
                     requirementStatus: this.requirementStatus }, this.documentId)
-                router.push('/list-requirement')
+                router.push('/list-requirements')
             } else {
                 requirementsService.createRequirement({ requirementName: this.requirementName,
                     requirementVersion: this.requirementVersion,
@@ -165,7 +165,7 @@ export default {
                     requirementDescription: this.requirementDescription,
                     requirementType: this.requirementType,
                     requirementStatus: this.requirementStatus })
-                router.push('/list-requirement')
+                router.push('/list-requirements')
             }
         },
         clear () {
