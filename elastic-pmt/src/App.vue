@@ -18,14 +18,45 @@
         lasticPMT
       </v-toolbar-title>
       <v-spacer />
-      <router-link to="requirement"
-                   class="navigation-link">
-        Requirements
-      </router-link>
-      <router-link to="list-requirement"
-                   class="navigation-link">
-        Tasks
-      </router-link>
+      <v-menu offset-y>
+        <template v-slot:activator="{ on }">
+          <v-btn
+            dark
+            text
+            class="mr-2"
+            v-on="on">
+            Requirements
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-item
+            v-for="(item, index) in items"
+            :key="index"
+            @click="pickOption(item)">
+            <v-list-item-title>{{ item }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+      <v-menu offset-y>
+        <template v-slot:activator="{ on }"
+                  class="r-2">
+          <v-btn
+            dark
+            text
+            class="mr-2"
+            v-on="on">
+            Tasks
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-item
+            v-for="(item, index) in items"
+            :key="index"
+            @click="pickOption(item)">
+            <v-list-item-title>{{ item }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </v-app-bar>
     <v-content>
       <router-view />
@@ -34,12 +65,25 @@
 </template>
 
 <script>
+import router from './router/index'
 
 export default {
     name: 'App',
     data: () => ({
-    //
-    })
+        items: [
+            'Create',
+            'List'
+        ]
+    }),
+    methods: {
+        pickOption (option) {
+            if (option === 'Create') {
+                router.push('/requirement')
+            } else {
+                router.push('/list-requirement')
+            }
+        }
+    }
 }
 </script>
 
