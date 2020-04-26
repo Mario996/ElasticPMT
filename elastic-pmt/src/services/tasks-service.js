@@ -40,6 +40,7 @@ async function createTask (task) {
     }
 
     return fetch('https://localhost:44332/tasks', requestOptions)
+        .then(response => response.json())
 }
 
 async function updateTask (task, id) {
@@ -60,6 +61,7 @@ async function updateTask (task, id) {
     }
 
     return fetch(`https://localhost:44332/tasks/${id}`, requestOptions)
+        .then(response => response.json())
 }
 
 async function deleteTask (id) {

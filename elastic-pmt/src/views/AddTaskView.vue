@@ -165,7 +165,9 @@ export default {
                     taskAssignee: this.taskAssignee,
                     taskEnvironment: this.taskEnvironment,
                     taskDescription: this.taskDescription }, this.documentId)
-                router.push('/list-tasks')
+                    .then(() => {
+                        router.push('/list-tasks')
+                    })
             } else {
                 tasksService.createTask({ taskSummary: this.taskSummary,
                     taskComponent: this.taskComponent,
@@ -174,7 +176,9 @@ export default {
                     taskAssignee: this.taskAssignee,
                     taskEnvironment: this.taskEnvironment,
                     taskDescription: this.taskDescription })
-                router.push('/list-tasks')
+                    .then(() => {
+                        router.push('/list-tasks')
+                    })
             }
         },
         clear () {

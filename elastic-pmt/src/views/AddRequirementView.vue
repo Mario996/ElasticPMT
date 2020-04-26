@@ -157,7 +157,9 @@ export default {
                     requirementDescription: this.requirementDescription,
                     requirementType: this.requirementType,
                     requirementStatus: this.requirementStatus }, this.documentId)
-                router.push('/list-requirements')
+                    .then(() => {
+                        router.push('/list-requirements')
+                    })
             } else {
                 requirementsService.createRequirement({ requirementName: this.requirementName,
                     requirementVersion: this.requirementVersion,
@@ -165,7 +167,9 @@ export default {
                     requirementDescription: this.requirementDescription,
                     requirementType: this.requirementType,
                     requirementStatus: this.requirementStatus })
-                router.push('/list-requirements')
+                    .then(() => {
+                        router.push('/list-requirements')
+                    })
             }
         },
         clear () {

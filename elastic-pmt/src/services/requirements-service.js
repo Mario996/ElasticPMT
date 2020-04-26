@@ -31,7 +31,7 @@ async function createRequirement (requirement) {
         body: JSON.stringify({
             Name: requirement.requirementName,
             Version: requirement.requirementVersion,
-            Descripton: requirement.requirementDescription,
+            Description: requirement.requirementDescription,
             Rationale: requirement.requirementRationale,
             Type: requirement.requirementType,
             Status: requirement.requirementStatus,
@@ -39,6 +39,7 @@ async function createRequirement (requirement) {
     }
 
     return fetch('https://localhost:44332/requirements', requestOptions)
+        .then(response => response.json())
 }
 
 async function updateRequirement (requirement, id) {
@@ -50,7 +51,7 @@ async function updateRequirement (requirement, id) {
         body: JSON.stringify({
             Name: requirement.requirementName,
             Version: requirement.requirementVersion,
-            Descripton: requirement.requirementDescription,
+            Description: requirement.requirementDescription,
             Rationale: requirement.requirementRationale,
             Type: requirement.requirementType,
             Status: requirement.requirementStatus,
@@ -58,6 +59,7 @@ async function updateRequirement (requirement, id) {
     }
 
     return fetch(`https://localhost:44332/requirements/${id}`, requestOptions)
+        .then(response => response.json())
 }
 
 async function deleteRequirement (id) {
