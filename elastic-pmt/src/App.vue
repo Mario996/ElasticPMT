@@ -1,10 +1,13 @@
 <template>
-  <v-app>
+  <v-app
+    class="background"
+    dark>
     <v-app-bar
       app
       color="primary"
       dark>
-      <div class="d-flex align-center">
+      <div class="d-flex align-center"
+           @click="goHome">
         <v-img
           alt="ElasticPMT"
           class="shrink"
@@ -13,10 +16,10 @@
           width="50"
           :src="require('./assets/elasticsearch-logo.png')"
           transition="scale-transition" />
+        <v-toolbar-title class="toolbar__title">
+          lasticPMT
+        </v-toolbar-title>
       </div>
-      <v-toolbar-title class="toolbar__title">
-        lasticPMT
-      </v-toolbar-title>
       <v-spacer />
       <v-menu offset-y>
         <template v-slot:activator="{ on }">
@@ -85,15 +88,17 @@ export default {
             } else {
                 router.push('/list-tasks')
             }
+        },
+        goHome () {
+            router.push('/home')
         }
     }
 }
 </script>
 
 <style>
-a.navigation-link{
-  color: white!important;
-  text-decoration: none;
-  padding-right: 10px;
-}
+.background {
+    background-image: url("./assets/background_1.jpg")!important;
+    color:black!important;
+  }
 </style>

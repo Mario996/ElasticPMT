@@ -4,9 +4,11 @@
     max-width="344">
     <v-card-text class="px-2 pt-2 pb-0">
       <v-row justify="center">
-        <h3 class="mb-2 text--primary">
-          {{ task.objectValue.summary }}
-        </h3>
+        <v-col class="py-0">
+          <h3 class="mb-2 text--primary">
+            {{ task.objectValue.summary }}
+          </h3>
+        </v-col>
       </v-row>
       <p class="mb-2 text--primary">
         Priority: {{ task.objectValue.priority }}
@@ -15,7 +17,7 @@
         Assignee: {{ task.objectValue.assignee }}
       </p>
     </v-card-text>
-    <v-card-actions class="text-center">
+    <v-card-actions class="text-center py-0">
       <v-row>
         <v-col cols="6">
           <v-btn @click="openDetails">
