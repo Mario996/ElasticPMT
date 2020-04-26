@@ -1,24 +1,12 @@
-# elastic-pmt
+Steps to get the project up and running are below, should be done from top to bottom:
 
-## Project setup
-```
-npm install
-```
+# Setup ElasticSearch
+1. Download and install ELasticSearch 7.6.2 from: https://www.elastic.co/downloads/elasticsearch
+2. Run ElasticSearch by running elasticsearch.bat found in bin folder (should be on port 9200, which is the default)
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+# Setup ElasticPMTServer
+1. Run the project (should be on port 44332)
 
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+# Setup elastic-pmt
+1. npm install
+2. npm run serve
