@@ -1,4 +1,5 @@
-﻿using Nest;
+﻿using ElasticPMTServer.Models;
+using Nest;
 using Task = ElasticPMTServer.Models.Task;
 
 namespace ElasticPMTServer.Repositories
@@ -22,9 +23,16 @@ namespace ElasticPMTServer.Repositories
         {
             return client.Indices.Create("tasks", c => c
                      .Settings(s => s
-                         .NumberOfShards(1)
-                     )
-            );
+                         .NumberOfShards(1))
+                         .Map<Task>(r => r
+                            .AutoMap()
+                            .Properties(ps => ps
+                                  .Nested<Comment>(n => n
+                                      .Name(nn => nn.Comments)
+                                  )
+                            )
+                         )
+                    );
         }
 
         public IndexResponse createTask(Task task)

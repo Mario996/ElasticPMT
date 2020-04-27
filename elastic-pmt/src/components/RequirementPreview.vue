@@ -20,18 +20,28 @@
     </v-card-text>
     <v-card-actions class="text-center">
       <v-row>
-        <v-col cols="6">
-          <v-btn @click="openDetails">
+        <v-col cols="6"
+               class="px-0">
+          <v-btn @click="editRequirement">
             Edit
           </v-btn>
         </v-col>
-        <v-col cols="6">
+        <v-col cols="6"
+               class="px-0">
           <v-btn @click="deleteRequirement">
             Delete
           </v-btn>
         </v-col>
       </v-row>
     </v-card-actions>
+    <v-row>
+      <v-col cols="12"
+             class="py-0 pl-5">
+        <p class="mb-2 text--primary">
+          Comments: {{ requirement.objectValue.comments.length }}
+        </p>
+      </v-col>
+    </v-row>
   </v-card>
 </template>
 
@@ -45,7 +55,7 @@ export default {
     data: () => ({
     }),
     methods: {
-        openDetails () {
+        editRequirement () {
             router.push({ name: 'requirement', params: { requirement: this.requirement.objectValue, documentId: this.requirement.objectValue.id } })
         },
         deleteRequirement () {

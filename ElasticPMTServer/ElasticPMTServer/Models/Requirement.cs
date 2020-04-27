@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace ElasticPMTServer.Models
 {
@@ -11,5 +12,6 @@ namespace ElasticPMTServer.Models
         public string Rationale { get; set; }
         public string Type { get; set; }
         public string Status { get; set; }
+        public List<Comment> Comments { get; set; } = new List<Comment>();
     }
 }

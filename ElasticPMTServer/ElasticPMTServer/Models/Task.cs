@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace ElasticPMTServer.Models
 {
@@ -12,5 +13,6 @@ namespace ElasticPMTServer.Models
         public string Environment { get; set; }
         public string Component { get; set; }
         public string Description { get; set; }
+        public List<Comment> Comments { get; set; } = new List<Comment>();
     }
 }

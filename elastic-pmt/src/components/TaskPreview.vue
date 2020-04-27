@@ -31,6 +31,14 @@
         </v-col>
       </v-row>
     </v-card-actions>
+    <v-row>
+      <v-col cols="12"
+             class="py-0 pl-5">
+        <p class="mb-2 text--primary">
+          Comments: {{ task.objectValue.comments.length }}
+        </p>
+      </v-col>
+    </v-row>
   </v-card>
 </template>
 
@@ -48,7 +56,6 @@ export default {
             router.push({ name: 'task', params: { task: this.task.objectValue, documentId: this.task.objectValue.id } })
         },
         deleteTask () {
-            console.log(this.task.objectValue)
             this.$emit('delete-task', this.task.objectValue.id)
         }
     },

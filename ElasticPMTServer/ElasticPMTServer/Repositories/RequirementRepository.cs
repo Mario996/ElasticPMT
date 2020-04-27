@@ -1,5 +1,7 @@
 ﻿using ElasticPMTServer.Models;
+using Elasticsearch.Net;
 using Nest;
+using System.Collections.Generic;
 
 namespace ElasticPMTServer.Repositories
 {
@@ -70,6 +72,13 @@ namespace ElasticPMTServer.Repositories
             return client.Indices.Create("requirements", c => c
                         .Settings(s => s
                             .NumberOfShards(1)
+                        ).Map<Requirement>(r => r
+                            .AutoMap()
+                            .Properties(ps => ps
+                                    .Nested<Comment>(n => n
+                                        .Name(nn => nn.Comments)
+                                    )
+                            )
                         )
             );
         }

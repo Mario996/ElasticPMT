@@ -39,6 +39,7 @@ async function createTask (task) {
             Assignee: task.taskAssignee,
             Environment: task.taskEnvironment,
             Description: task.taskDescription,
+            Comments: [],
         }),
     }
 
@@ -61,6 +62,7 @@ async function updateTask (task, id) {
             Assignee: task.taskAssignee,
             Environment: task.taskEnvironment,
             Description: task.taskDescription,
+            Comments: task.taskComments,
         }),
     }
 

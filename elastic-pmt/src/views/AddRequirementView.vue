@@ -35,6 +35,7 @@
                 solo
                 name="input-7-4"
                 label="Requirement description"
+                height="8vh"
                 required
                 :error-messages="errors"
                 :counter="500" />
@@ -46,6 +47,7 @@
                 v-model="requirementRationale"
                 solo
                 name="input-7-4"
+                height="8vh"
                 label="Requirement rationale"
                 :error-messages="errors"
                 :counter="500" />
@@ -79,14 +81,45 @@
               </v-radio-group>
             </ValidationProvider>
             <v-row justify="center">
-              <v-btn class="mr-4"
-                     width="300"
-                     color="primary"
-                     @click="submitForm">
+              <v-btn
+                class="mr-4"
+                width="300"
+                color="primary"
+                @click="submitForm">
                 {{ mode }}
               </v-btn>
             </v-row>
           </form>
+          <v-row v-if="mode !== 'CREATE'">
+            <v-col cols="12">
+              <label>Comments:</label>
+              <CommentComponent v-for="comment in requirement.comments"
+                                :key="comment.id"
+                                :comment="comment"
+                                @update-comment="updateComment"
+                                @delete-comment="deleteComment" />
+            </v-col>
+          </v-row>
+          <v-row v-if="mode !== 'CREATE'"
+                 justify="center">
+            <v-col cols="10">
+              <v-textarea
+                v-model="comment"
+                solo
+                height="8vh"
+                name="input-7-4"
+                label="Comment"
+                :counter="500" />
+            </v-col>
+            <v-col cols="2">
+              <v-btn
+                class="mb-4"
+                color="primary"
+                @click="addComment">
+                ADD COMMENT
+              </v-btn>
+            </v-col>
+          </v-row>
         </ValidationObserver>
       </v-col>
     </v-row>
@@ -96,8 +129,10 @@
 <script>
 import { required, max, min } from 'vee-validate/dist/rules'
 import { extend, ValidationObserver, ValidationProvider, setInteractionMode } from 'vee-validate'
+import CommentComponent from '../components/CommentComponent'
 import { requirementsService } from '../services/requirements-service'
 import router from '../router/index'
+import { v4 as uuidv4 } from 'uuid'
 
 setInteractionMode('eager')
 
@@ -120,6 +155,7 @@ export default {
     components: {
         ValidationProvider,
         ValidationObserver,
+        CommentComponent,
     },
     props: {
         requirement: { type: Object, default: () => {} },
@@ -131,8 +167,8 @@ export default {
         requirementDescription: '',
         requirementType: '',
         requirementStatus: '',
-        updateMode: false,
         mode: 'CREATE',
+        comment: '',
     }),
     created () {
         if (this.requirement !== undefined) {
@@ -155,7 +191,8 @@ export default {
                     requirementRationale: this.requirementRationale,
                     requirementDescription: this.requirementDescription,
                     requirementType: this.requirementType,
-                    requirementStatus: this.requirementStatus }, this.requirement.id)
+                    requirementStatus: this.requirementStatus,
+                    requirementComments: this.requirement.comments }, this.requirement.id)
                     .then(() => {
                         router.push('/list-requirements')
                     })
@@ -170,6 +207,39 @@ export default {
                         router.push('/list-requirements')
                     })
             }
+        },
+        addComment () {
+            this.requirement.comments.push({ text: this.comment, id: uuidv4() })
+            requirementsService.updateRequirement({ requirementName: this.requirementName,
+                requirementVersion: this.requirementVersion,
+                requirementRationale: this.requirementRationale,
+                requirementDescription: this.requirementDescription,
+                requirementType: this.requirementType,
+                requirementStatus: this.requirementStatus,
+                requirementComments: this.requirement.comments }, this.requirement.id)
+            this.comment = ''
+        },
+        updateComment (comment) {
+            var commentIndexToBeUpdated = this.requirement.comments.find(x => x.id === comment.id)
+            this.requirement.comments.splice(commentIndexToBeUpdated, 1, comment)
+            requirementsService.updateRequirement({ requirementName: this.requirementName,
+                requirementVersion: this.requirementVersion,
+                requirementRationale: this.requirementRationale,
+                requirementDescription: this.requirementDescription,
+                requirementType: this.requirementType,
+                requirementStatus: this.requirementStatus,
+                requirementComments: this.requirement.comments }, this.requirement.id)
+        },
+        deleteComment (comment) {
+            var commentIndexToBeDeleted = this.requirement.comments.findIndex(x => x.id === comment.id)
+            this.requirement.comments.splice(commentIndexToBeDeleted, 1)
+            requirementsService.updateRequirement({ requirementName: this.requirementName,
+                requirementVersion: this.requirementVersion,
+                requirementRationale: this.requirementRationale,
+                requirementDescription: this.requirementDescription,
+                requirementType: this.requirementType,
+                requirementStatus: this.requirementStatus,
+                requirementComments: this.requirement.comments }, this.requirement.id)
         },
         clear () {
             this.requirementName = ''
