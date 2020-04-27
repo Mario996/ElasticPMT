@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <RequirementPreview v-for="requirement in requirements"
-                        :key="requirement.name"
+                        :key="requirement.id"
                         :requirement="requirement"
                         @delete-requirement="deleteRequirement" />
   </v-container>
@@ -9,7 +9,6 @@
 
 <script>
 import { requirementsService } from '../services/requirements-service'
-import router from '../router/index'
 import RequirementPreview from '../components/RequirementPreview'
 
 export default {
@@ -24,7 +23,6 @@ export default {
             .then((response) => {
                 this.requirements = response.map(x => {
                     return {
-                        id: x.id,
                         objectValue: x.source,
                     }
                 })
@@ -33,14 +31,8 @@ export default {
     methods: {
         clear () {
         },
-        updateRequirement (id) {
-            requirementsService.getRequirementById(id)
-                .then((response) => {
-                    router.push({ name: 'requirement', params: { requirement: response.source, documentId: response.id } })
-                })
-        },
         deleteRequirement (id) {
-            this.requirements = this.requirements.filter(x => x.id !== id)
+            this.requirements = this.requirements.filter(x => x.objectValue.id !== id)
             requirementsService.deleteRequirement(id)
                 .then((response) => {
                     console.log(response)

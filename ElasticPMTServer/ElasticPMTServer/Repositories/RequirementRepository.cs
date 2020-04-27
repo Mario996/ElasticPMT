@@ -7,7 +7,9 @@ namespace ElasticPMTServer.Repositories
     {
         public static ConnectionSettings settings = new ConnectionSettings()
                                                         .DefaultMappingFor<Requirement>(m => m
-                                                        .IndexName("requirements"));
+                                                        .IndexName("requirements") 
+                                                        .IdProperty(p => p.Id)
+                                                        );
 
         public static ElasticClient client = new ElasticClient(settings);
 

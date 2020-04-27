@@ -45,10 +45,11 @@ export default {
     }),
     methods: {
         openDetails () {
-            router.push({ name: 'task', params: { task: this.task.objectValue, documentId: this.task.id } })
+            router.push({ name: 'task', params: { task: this.task.objectValue, documentId: this.task.objectValue.id } })
         },
         deleteTask () {
-            this.$emit('delete-task', this.task.id)
+            console.log(this.task.objectValue)
+            this.$emit('delete-task', this.task.objectValue.id)
         }
     },
 }

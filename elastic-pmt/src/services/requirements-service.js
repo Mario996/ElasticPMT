@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid'
+
 async function getAllRequirements () {
     const requestOptions = {
         method: 'GET',
@@ -29,6 +31,7 @@ async function createRequirement (requirement) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
+            Id: uuidv4(),
             Name: requirement.requirementName,
             Version: requirement.requirementVersion,
             Description: requirement.requirementDescription,
@@ -49,6 +52,7 @@ async function updateRequirement (requirement, id) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
+            Id: id,
             Name: requirement.requirementName,
             Version: requirement.requirementVersion,
             Description: requirement.requirementDescription,

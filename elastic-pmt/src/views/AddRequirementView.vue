@@ -123,7 +123,6 @@ export default {
     },
     props: {
         requirement: { type: Object, default: () => {} },
-        documentId: { type: String, default: '' }
     },
     data: () => ({
         requirementName: '',
@@ -156,7 +155,7 @@ export default {
                     requirementRationale: this.requirementRationale,
                     requirementDescription: this.requirementDescription,
                     requirementType: this.requirementType,
-                    requirementStatus: this.requirementStatus }, this.documentId)
+                    requirementStatus: this.requirementStatus }, this.requirement.id)
                     .then(() => {
                         router.push('/list-requirements')
                     })

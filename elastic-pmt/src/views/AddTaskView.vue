@@ -126,7 +126,6 @@ export default {
     },
     props: {
         task: { type: Object, default: () => {} },
-        documentId: { type: String, default: '' }
     },
     data: () => ({
         taskSummary: '',
@@ -164,7 +163,7 @@ export default {
                     taskPriority: this.taskPriority,
                     taskAssignee: this.taskAssignee,
                     taskEnvironment: this.taskEnvironment,
-                    taskDescription: this.taskDescription }, this.documentId)
+                    taskDescription: this.taskDescription }, this.task.id)
                     .then(() => {
                         router.push('/list-tasks')
                     })

@@ -46,10 +46,10 @@ export default {
     }),
     methods: {
         openDetails () {
-            router.push({ name: 'requirement', params: { requirement: this.requirement.objectValue, documentId: this.requirement.id } })
+            router.push({ name: 'requirement', params: { requirement: this.requirement.objectValue, documentId: this.requirement.objectValue.id } })
         },
         deleteRequirement () {
-            this.$emit('delete-requirement', this.requirement.id)
+            this.$emit('delete-requirement', this.requirement.objectValue.id)
         }
     },
 }

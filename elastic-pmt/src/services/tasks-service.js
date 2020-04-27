@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid'
+
 async function getAllTasks () {
     const requestOptions = {
         method: 'GET',
@@ -29,6 +31,7 @@ async function createTask (task) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
+            Id: uuidv4(),
             Summary: task.taskSummary,
             Component: task.taskComponent,
             Type: task.taskType,
@@ -50,6 +53,7 @@ async function updateTask (task, id) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
+            Id: id,
             Summary: task.taskSummary,
             Component: task.taskComponent,
             Type: task.taskType,
