@@ -75,11 +75,17 @@
             <ValidationProvider v-slot="{ errors }"
                                 name="Task assignee"
                                 rules="required|max:100">
-              <v-text-field
+              <v-autocomplete
                 v-model="task.assignee"
                 :error-messages="errors"
+                :items="users"
+                dense
+                filled
+                item-text="email"
+                item-value="email"
                 label="Task assignee"
-                required />
+                required
+                return-object />
             </ValidationProvider>
             <v-row justify="center">
               <v-btn class="mr-4"
@@ -133,6 +139,7 @@ import { tasksService } from '../services/tasks-service'
 import router from '../router/index'
 import CommentComponent from '../components/CommentComponent'
 import { v4 as uuidv4 } from 'uuid'
+import { usersService } from '../services/users-service'
 
 setInteractionMode('eager')
 
@@ -164,6 +171,7 @@ export default {
         task: {},
         comment: '',
         mode: 'CREATE',
+        users: [],
         taskTypes: ['Bug', 'Story', 'Epic', 'Task', 'Subtask'],
         taskPriorities: ['Blocker', 'Critical', 'Major', 'Minor', 'Trivial']
     }),
@@ -172,21 +180,28 @@ export default {
             this.mode = 'UPDATE'
             this.task = this.taskObject
         }
+        usersService.getAllUsers()
+            .then((response) => {
+                this.users = response.map(x => x.source)
+            })
     },
     methods: {
         submitForm () {
-            this.$refs.observer.validate()
-            if (this.mode === 'UPDATE') {
-                tasksService.updateTask(this.task, this.task.id)
-                    .then(() => {
-                        router.push('/list-tasks')
-                    })
-            } else {
-                tasksService.createTask(this.task)
-                    .then(() => {
-                        router.push('/list-tasks')
-                    })
-            }
+            this.$refs.observer.validate().then((result) => {
+                if (result) {
+                    if (this.mode === 'UPDATE') {
+                        tasksService.updateTask(this.task, this.task.id)
+                            .then(() => {
+                                router.push('/list-tasks')
+                            })
+                    } else {
+                        tasksService.createTask(this.task)
+                            .then(() => {
+                                router.push('/list-tasks')
+                            })
+                    }
+                }
+            })
         },
         addComment () {
             this.task.comments.push({ text: this.comment, id: uuidv4() })

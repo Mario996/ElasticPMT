@@ -14,7 +14,7 @@
         Priority: {{ task.objectValue.priority }}
       </p>
       <p class="mb-2 text--primary">
-        Assignee: {{ task.objectValue.assignee }}
+        Assignee: {{ task.objectValue.assignee.email }}
       </p>
     </v-card-text>
     <v-card-actions class="text-center py-0">

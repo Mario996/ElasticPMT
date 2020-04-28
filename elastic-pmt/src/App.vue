@@ -21,6 +21,13 @@
         </v-toolbar-title>
       </div>
       <v-spacer />
+      <v-btn
+        dark
+        text
+        class="mr-2"
+        @click="openUsersPage">
+        Users
+      </v-btn>
       <v-menu offset-y>
         <template v-slot:activator="{ on }">
           <v-btn
@@ -88,6 +95,9 @@ export default {
             } else {
                 router.push('/list-tasks')
             }
+        },
+        openUsersPage () {
+            router.push('/users')
         },
         goHome () {
             router.push('/home')

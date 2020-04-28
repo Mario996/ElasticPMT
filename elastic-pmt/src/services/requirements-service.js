@@ -38,6 +38,7 @@ async function createRequirement (requirement) {
             Rationale: requirement.rationale,
             Type: requirement.type,
             Status: requirement.status,
+            Author: requirement.author,
             Comments: [],
         }),
     }
@@ -60,6 +61,7 @@ async function updateRequirement (requirement, id) {
             Rationale: requirement.rationale,
             Type: requirement.type,
             Status: requirement.status,
+            Author: requirement.author,
             Comments: requirement.comments,
         }),
     }

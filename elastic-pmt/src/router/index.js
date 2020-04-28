@@ -40,6 +40,11 @@ const routes = [
         name: 'list-tasks',
         component: () => import(/* webpackChunkName: "about" */ '../views/ListTaskView.vue')
     },
+    {
+        path: '/users',
+        name: 'users',
+        component: () => import(/* webpackChunkName: "about" */ '../views/UsersView.vue')
+    },
 ]
 
 const router = new VueRouter({

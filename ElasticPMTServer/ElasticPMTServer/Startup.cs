@@ -22,6 +22,7 @@ namespace ElasticPMTServer
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddSingleton<IRequirementRepository, RequirementRepository>();
             services.AddSingleton<ITaskRepository, TaskRepository>();
+            services.AddSingleton<IUserRepository, UserRepository>();
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy",

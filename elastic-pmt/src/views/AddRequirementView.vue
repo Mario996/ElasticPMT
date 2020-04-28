@@ -80,6 +80,21 @@
                          value="Declined" />
               </v-radio-group>
             </ValidationProvider>
+            <ValidationProvider v-slot="{ errors }"
+                                name="Requirement author"
+                                rules="required|max:100">
+              <v-autocomplete
+                v-model="requirement.author"
+                :error-messages="errors"
+                :items="users"
+                dense
+                filled
+                item-text="email"
+                item-value="email"
+                label="Requirement author"
+                required
+                return-object />
+            </ValidationProvider>
             <v-row justify="center">
               <v-btn
                 class="mr-4"
@@ -133,6 +148,7 @@ import CommentComponent from '../components/CommentComponent'
 import { requirementsService } from '../services/requirements-service'
 import router from '../router/index'
 import { v4 as uuidv4 } from 'uuid'
+import { usersService } from '../services/users-service'
 
 setInteractionMode('eager')
 
@@ -164,27 +180,35 @@ export default {
         requirement: {},
         mode: 'CREATE',
         comment: '',
+        users: [],
     }),
     created () {
         if (this.requirementObject !== undefined) {
             this.mode = 'UPDATE'
             this.requirement = this.requirementObject
         }
+        usersService.getAllUsers()
+            .then((response) => {
+                this.users = response.map(x => x.source)
+            })
     },
     methods: {
         submitForm () {
-            this.$refs.observer.validate()
-            if (this.mode === 'UPDATE') {
-                requirementsService.updateRequirement(this.requirement, this.requirement.id)
-                    .then(() => {
-                        router.push('/list-requirements')
-                    })
-            } else {
-                requirementsService.createRequirement(this.requirement)
-                    .then(() => {
-                        router.push('/list-requirements')
-                    })
-            }
+            this.$refs.observer.validate().then((result) => {
+                if (result) {
+                    if (this.mode === 'UPDATE') {
+                        requirementsService.updateRequirement(this.requirement, this.requirement.id)
+                            .then(() => {
+                                router.push('/list-requirements')
+                            })
+                    } else {
+                        requirementsService.createRequirement(this.requirement)
+                            .then(() => {
+                                router.push('/list-requirements')
+                            })
+                    }
+                }
+            })
         },
         addComment () {
             this.requirement.comments.push({ text: this.comment, id: uuidv4() })

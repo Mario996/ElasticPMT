@@ -13,5 +13,6 @@ namespace ElasticPMTServer.Models
         public string Type { get; set; }
         public string Status { get; set; }
         public List<Comment> Comments { get; set; } = new List<Comment>();
+        public User Author { get; set; }
     }
 }
