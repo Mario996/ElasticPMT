@@ -13,7 +13,7 @@
                                 name="Task summary"
                                 rules="required|max:100">
               <v-text-field
-                v-model="taskSummary"
+                v-model="task.summary"
                 :error-messages="errors"
                 label="Task summary"
                 required />
@@ -22,7 +22,7 @@
                                 name="Component"
                                 rules="required|max:20">
               <v-text-field
-                v-model="taskComponent"
+                v-model="task.component"
                 :error-messages="errors"
                 label="Component"
                 required />
@@ -31,7 +31,7 @@
                                 name="Task type"
                                 rules="required">
               <v-select
-                v-model="taskType"
+                v-model="task.type"
                 :error-messages="errors"
                 :items="taskTypes"
                 label="Task type"
@@ -42,7 +42,7 @@
                                 name="Task priority"
                                 rules="required">
               <v-select
-                v-model="taskPriority"
+                v-model="task.priority"
                 :error-messages="errors"
                 :items="taskPriorities"
                 label="Task priority"
@@ -53,7 +53,7 @@
                                 name="Task environment"
                                 rules="required|max:500|min:10">
               <v-textarea
-                v-model="taskEnvironment"
+                v-model="task.environment"
                 solo
                 name="input-7-4"
                 label="Task environment"
@@ -64,7 +64,7 @@
                                 name="Task description"
                                 rules="required|max:500|min:10">
               <v-textarea
-                v-model="taskDescription"
+                v-model="task.description"
                 solo
                 name="input-7-4"
                 label="Task description"
@@ -76,7 +76,7 @@
                                 name="Task assignee"
                                 rules="required|max:100">
               <v-text-field
-                v-model="taskAssignee"
+                v-model="task.assignee"
                 :error-messages="errors"
                 label="Task assignee"
                 required />
@@ -102,7 +102,7 @@
           </v-row>
           <v-row v-if="mode !== 'CREATE'"
                  justify="center">
-            <v-col cols="8">
+            <v-col cols="10">
               <v-textarea
                 v-model="comment"
                 solo
@@ -111,10 +111,9 @@
                 label="Comment"
                 :counter="500" />
             </v-col>
-            <v-col cols="4">
+            <v-col cols="2">
               <v-btn
                 class="mb-4"
-                width="300"
                 color="primary"
                 @click="addComment">
                 ADD COMMENT
@@ -159,58 +158,31 @@ export default {
         CommentComponent,
     },
     props: {
-        task: { type: Object, default: () => {} },
+        taskObject: { type: Object, default: () => {} },
     },
     data: () => ({
-        taskSummary: '',
-        taskComponent: '',
-        taskType: '',
-        taskPriority: '',
-        taskAssignee: '',
-        taskEnvironment: '',
-        taskDescription: '',
+        task: {},
         comment: '',
-        updateMode: false,
         mode: 'CREATE',
         taskTypes: ['Bug', 'Story', 'Epic', 'Task', 'Subtask'],
         taskPriorities: ['Blocker', 'Critical', 'Major', 'Minor', 'Trivial']
     }),
     created () {
-        if (this.task !== undefined) {
-            this.updateMode = true
+        if (this.taskObject !== undefined) {
             this.mode = 'UPDATE'
-            this.taskSummary = this.task.summary
-            this.taskComponent = this.task.component
-            this.taskType = this.task.type
-            this.taskPriority = this.task.priority
-            this.taskAssignee = this.task.assignee
-            this.taskEnvironment = this.task.environment
-            this.taskDescription = this.task.description
+            this.task = this.taskObject
         }
     },
     methods: {
         submitForm () {
             this.$refs.observer.validate()
-            if (this.updateMode) {
-                tasksService.updateTask({ taskSummary: this.taskSummary,
-                    taskComponent: this.taskComponent,
-                    taskType: this.taskType,
-                    taskPriority: this.taskPriority,
-                    taskAssignee: this.taskAssignee,
-                    taskEnvironment: this.taskEnvironment,
-                    taskDescription: this.taskDescription,
-                    taskComments: this.task.comments }, this.task.id)
+            if (this.mode === 'UPDATE') {
+                tasksService.updateTask(this.task, this.task.id)
                     .then(() => {
                         router.push('/list-tasks')
                     })
             } else {
-                tasksService.createTask({ taskSummary: this.taskSummary,
-                    taskComponent: this.taskComponent,
-                    taskType: this.taskType,
-                    taskPriority: this.taskPriority,
-                    taskAssignee: this.taskAssignee,
-                    taskEnvironment: this.taskEnvironment,
-                    taskDescription: this.taskDescription })
+                tasksService.createTask(this.task)
                     .then(() => {
                         router.push('/list-tasks')
                     })
@@ -218,50 +190,18 @@ export default {
         },
         addComment () {
             this.task.comments.push({ text: this.comment, id: uuidv4() })
-            tasksService.updateTask({ taskSummary: this.taskSummary,
-                taskComponent: this.taskComponent,
-                taskType: this.taskType,
-                taskPriority: this.taskPriority,
-                taskAssignee: this.taskAssignee,
-                taskEnvironment: this.taskEnvironment,
-                taskDescription: this.taskDescription,
-                taskComments: this.task.comments }, this.task.id)
+            tasksService.updateTask(this.task, this.task.id)
             this.comment = ''
         },
         updateComment (comment) {
-            // TODO: OVDE IMA BUG KOD UPDATEA, IMA I NA REQUIREMENTU
-            var commentIndexToBeUpdated = this.task.comments.find(x => x.id === comment.id)
+            var commentIndexToBeUpdated = this.task.comments.findIndex(x => x.id === comment.id)
             this.task.comments.splice(commentIndexToBeUpdated, 1, comment)
-            tasksService.updateTask({ taskSummary: this.taskSummary,
-                taskComponent: this.taskComponent,
-                taskType: this.taskType,
-                taskPriority: this.taskPriority,
-                taskAssignee: this.taskAssignee,
-                taskEnvironment: this.taskEnvironment,
-                taskDescription: this.taskDescription,
-                taskComments: this.task.comments }, this.task.id)
+            tasksService.updateTask(this.task, this.task.id)
         },
         deleteComment (comment) {
             var commentIndexToBeDeleted = this.task.comments.findIndex(x => x.id === comment.id)
             this.task.comments.splice(commentIndexToBeDeleted, 1)
-            tasksService.updateTask({ taskSummary: this.taskSummary,
-                taskComponent: this.taskComponent,
-                taskType: this.taskType,
-                taskPriority: this.taskPriority,
-                taskAssignee: this.taskAssignee,
-                taskEnvironment: this.taskEnvironment,
-                taskDescription: this.taskDescription,
-                taskComments: this.task.comments }, this.task.id)
-        },
-        clear () {
-            this.taskSummary = ''
-            this.taskComponent = ''
-            this.taskType = ''
-            this.taskPriority = ''
-            this.taskAssignee = ''
-            this.taskEnvironment = ''
-            this.taskDescription = ''
-            this.$refs.observer.reset()
+            tasksService.updateTask(this.task, this.task.id)
         },
     },
 }

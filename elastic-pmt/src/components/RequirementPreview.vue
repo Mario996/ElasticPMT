@@ -56,7 +56,7 @@ export default {
     }),
     methods: {
         editRequirement () {
-            router.push({ name: 'requirement', params: { requirement: this.requirement.objectValue, documentId: this.requirement.objectValue.id } })
+            router.push({ name: 'requirement', params: { requirementObject: this.requirement.objectValue, documentId: this.requirement.objectValue.id } })
         },
         deleteRequirement () {
             this.$emit('delete-requirement', this.requirement.objectValue.id)

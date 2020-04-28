@@ -13,7 +13,7 @@
                                 name="Requirement name"
                                 rules="required|max:30">
               <v-text-field
-                v-model="requirementName"
+                v-model="requirement.name"
                 :error-messages="errors"
                 label="Requirement name"
                 required />
@@ -22,7 +22,7 @@
                                 name="Requirement version"
                                 rules="required|max:10">
               <v-text-field
-                v-model="requirementVersion"
+                v-model="requirement.version"
                 :error-messages="errors"
                 label="Requirement version"
                 required />
@@ -31,7 +31,7 @@
                                 name="Requirement description"
                                 rules="required|max:500|min:10">
               <v-textarea
-                v-model="requirementDescription"
+                v-model="requirement.description"
                 solo
                 name="input-7-4"
                 label="Requirement description"
@@ -44,7 +44,7 @@
                                 name="Requirement rationale"
                                 rules="required|max:500|min:10">
               <v-textarea
-                v-model="requirementRationale"
+                v-model="requirement.rationale"
                 solo
                 name="input-7-4"
                 height="8vh"
@@ -55,7 +55,7 @@
             <ValidationProvider v-slot="{ errors }"
                                 name="Requirement type"
                                 rules="required">
-              <v-radio-group v-model="requirementType"
+              <v-radio-group v-model="requirement.type"
                              row
                              :error-messages="errors"
                              label="Requirement type:">
@@ -68,7 +68,7 @@
             <ValidationProvider v-slot="{ errors }"
                                 name="Requirement status"
                                 rules="required">
-              <v-radio-group v-model="requirementStatus"
+              <v-radio-group v-model="requirement.status"
                              row
                              :error-messages="errors"
                              label="Requirement status:">
@@ -158,51 +158,29 @@ export default {
         CommentComponent,
     },
     props: {
-        requirement: { type: Object, default: () => {} },
+        requirementObject: { type: Object, default: () => {} },
     },
     data: () => ({
-        requirementName: '',
-        requirementVersion: '',
-        requirementRationale: '',
-        requirementDescription: '',
-        requirementType: '',
-        requirementStatus: '',
+        requirement: {},
         mode: 'CREATE',
         comment: '',
     }),
     created () {
-        if (this.requirement !== undefined) {
-            this.updateMode = true
+        if (this.requirementObject !== undefined) {
             this.mode = 'UPDATE'
-            this.requirementName = this.requirement.name
-            this.requirementVersion = this.requirement.version
-            this.requirementRationale = this.requirement.rationale
-            this.requirementDescription = this.requirement.description
-            this.requirementType = this.requirement.type
-            this.requirementStatus = this.requirement.status
+            this.requirement = this.requirementObject
         }
     },
     methods: {
         submitForm () {
             this.$refs.observer.validate()
-            if (this.updateMode) {
-                requirementsService.updateRequirement({ requirementName: this.requirementName,
-                    requirementVersion: this.requirementVersion,
-                    requirementRationale: this.requirementRationale,
-                    requirementDescription: this.requirementDescription,
-                    requirementType: this.requirementType,
-                    requirementStatus: this.requirementStatus,
-                    requirementComments: this.requirement.comments }, this.requirement.id)
+            if (this.mode === 'UPDATE') {
+                requirementsService.updateRequirement(this.requirement, this.requirement.id)
                     .then(() => {
                         router.push('/list-requirements')
                     })
             } else {
-                requirementsService.createRequirement({ requirementName: this.requirementName,
-                    requirementVersion: this.requirementVersion,
-                    requirementRationale: this.requirementRationale,
-                    requirementDescription: this.requirementDescription,
-                    requirementType: this.requirementType,
-                    requirementStatus: this.requirementStatus })
+                requirementsService.createRequirement(this.requirement)
                     .then(() => {
                         router.push('/list-requirements')
                     })
@@ -210,45 +188,18 @@ export default {
         },
         addComment () {
             this.requirement.comments.push({ text: this.comment, id: uuidv4() })
-            requirementsService.updateRequirement({ requirementName: this.requirementName,
-                requirementVersion: this.requirementVersion,
-                requirementRationale: this.requirementRationale,
-                requirementDescription: this.requirementDescription,
-                requirementType: this.requirementType,
-                requirementStatus: this.requirementStatus,
-                requirementComments: this.requirement.comments }, this.requirement.id)
+            requirementsService.updateRequirement(this.requirement, this.requirement.id)
             this.comment = ''
         },
         updateComment (comment) {
-            var commentIndexToBeUpdated = this.requirement.comments.find(x => x.id === comment.id)
+            var commentIndexToBeUpdated = this.requirement.comments.findIndex(x => x.id === comment.id)
             this.requirement.comments.splice(commentIndexToBeUpdated, 1, comment)
-            requirementsService.updateRequirement({ requirementName: this.requirementName,
-                requirementVersion: this.requirementVersion,
-                requirementRationale: this.requirementRationale,
-                requirementDescription: this.requirementDescription,
-                requirementType: this.requirementType,
-                requirementStatus: this.requirementStatus,
-                requirementComments: this.requirement.comments }, this.requirement.id)
+            requirementsService.updateRequirement(this.requirement, this.requirement.id)
         },
         deleteComment (comment) {
             var commentIndexToBeDeleted = this.requirement.comments.findIndex(x => x.id === comment.id)
             this.requirement.comments.splice(commentIndexToBeDeleted, 1)
-            requirementsService.updateRequirement({ requirementName: this.requirementName,
-                requirementVersion: this.requirementVersion,
-                requirementRationale: this.requirementRationale,
-                requirementDescription: this.requirementDescription,
-                requirementType: this.requirementType,
-                requirementStatus: this.requirementStatus,
-                requirementComments: this.requirement.comments }, this.requirement.id)
-        },
-        clear () {
-            this.requirementName = ''
-            this.requirementVersion = ''
-            this.requirementRationale = ''
-            this.requirementDescription = ''
-            this.requirementType = ''
-            this.requirementStatus = ''
-            this.$refs.observer.reset()
+            requirementsService.updateRequirement(this.requirement, this.requirement.id)
         },
     },
 }
