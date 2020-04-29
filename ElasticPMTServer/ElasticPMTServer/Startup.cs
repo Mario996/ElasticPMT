@@ -24,6 +24,7 @@ namespace ElasticPMTServer
             services.AddSingleton<ITaskRepository, TaskRepository>();
             services.AddSingleton<IUserRepository, UserRepository>();
             services.AddSingleton<IStatusRepository, StatusRepository>();
+            services.AddSingleton<IProjectRepository, ProjectRepository>();
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy",

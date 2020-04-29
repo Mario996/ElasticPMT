@@ -42,6 +42,25 @@
             text
             class="mr-2"
             v-on="on">
+            Projects
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-item
+            v-for="(item, index) in items"
+            :key="index"
+            @click="pickOption(item, 'project')">
+            <v-list-item-title>{{ item }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+      <v-menu offset-y>
+        <template v-slot:activator="{ on }">
+          <v-btn
+            dark
+            text
+            class="mr-2"
+            v-on="on">
             Requirements
           </v-btn>
         </template>
@@ -99,8 +118,12 @@ export default {
                 router.push('/list-requirements')
             } else if (option === 'Create' && menu === 'task') {
                 router.push('/task')
-            } else {
+            } else if (option === 'List' && menu === 'task') {
                 router.push('/list-tasks')
+            } else if (option === 'Create' && menu === 'project') {
+                router.push('/project')
+            } else {
+                router.push('/list-projects')
             }
         },
         openUsersPage () {

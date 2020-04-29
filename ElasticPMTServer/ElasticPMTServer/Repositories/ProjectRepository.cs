@@ -3,11 +3,11 @@ using Nest;
 
 namespace ElasticPMTServer.Repositories
 {
-    public class UserRepository : IUserRepository
+    public class ProjectRepository : IProjectRepository
     {
         public static ConnectionSettings settings = new ConnectionSettings()
-                                                       .DefaultMappingFor<User>(m => m
-                                                       .IndexName("users")
+                                                       .DefaultMappingFor<Project>(m => m
+                                                       .IndexName("projects")
                                                        .IdProperty(p => p.Id)
                                                        );
 
@@ -15,12 +15,12 @@ namespace ElasticPMTServer.Repositories
 
         public bool checkIfIndexExists()
         {
-            return client.Indices.Exists("users").Exists;
+            return client.Indices.Exists("projects").Exists;
         }
 
         public CreateIndexResponse createIndex()
         {
-            return client.Indices.Create("users", c => c
+            return client.Indices.Create("projects", c => c
                     .Settings(s => s
                         .NumberOfShards(1))
                         .Map<User>(r => r
@@ -29,11 +29,11 @@ namespace ElasticPMTServer.Repositories
                    );
         }
 
-        public IndexResponse createUser(User user)
+        public IndexResponse createProject(Project project)
         {
             if (checkIfIndexExists())
             {
-                return client.Index(user, i => i
+                return client.Index(project, i => i
                     .Refresh(Elasticsearch.Net.Refresh.True));
             }
             else
@@ -41,38 +41,38 @@ namespace ElasticPMTServer.Repositories
                 var response = createIndex();
                 if (response.IsValid)
                 {
-                    return client.Index(user, i => i
+                    return client.Index(project, i => i
                         .Refresh(Elasticsearch.Net.Refresh.True));
                 }
                 return null;
             }
         }
 
-        public DeleteResponse deleteUser(string id)
+        public DeleteResponse deleteProject(string id)
         {
-            return client.Delete<User>(id);
+            return client.Delete<Project>(id);
         }
 
-        public GetResponse<User> getUserById(string id)
+        public GetResponse<Project> getProjectById(string id)
         {
             client.Indices.Refresh();
-            return client.Get<User>(id);
+            return client.Get<Project>(id);
         }
 
-        public ISearchResponse<User> getUsers()
+        public ISearchResponse<Project> getProjects()
         {
             client.Indices.Refresh();
-            return client.Search<User>(s => s
+            return client.Search<Project>(s => s
                .MatchAll()
             );
         }
 
-        public UpdateResponse<User> updateUser(string id, User user)
+        public UpdateResponse<Project> updateProject(string id, Project project)
         {
-           return client.Update<User>(id, u => u
-                .Doc(user)
-                .Refresh(Elasticsearch.Net.Refresh.True)
-           );
+            return client.Update<Project>(id, u => u
+               .Doc(project)
+               .Refresh(Elasticsearch.Net.Refresh.True)
+          );
         }
     }
 }

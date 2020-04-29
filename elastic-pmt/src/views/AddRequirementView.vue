@@ -19,6 +19,20 @@
                 required />
             </ValidationProvider>
             <ValidationProvider v-slot="{ errors }"
+                                name="Project"
+                                rules="required">
+              <v-select
+                v-model="requirement.project"
+                :error-messages="errors"
+                :items="projects"
+                label="Project"
+                item-text="name"
+                item-value="name"
+                dense
+                outlined
+                return-object />
+            </ValidationProvider>
+            <ValidationProvider v-slot="{ errors }"
                                 name="Requirement version"
                                 rules="required|max:10">
               <v-text-field
@@ -149,6 +163,7 @@ import { requirementsService } from '../services/requirements-service'
 import router from '../router/index'
 import { v4 as uuidv4 } from 'uuid'
 import { usersService } from '../services/users-service'
+import { projectsService } from '../services/projects-service'
 
 setInteractionMode('eager')
 
@@ -181,6 +196,7 @@ export default {
         mode: 'CREATE',
         comment: '',
         users: [],
+        projects: [],
     }),
     created () {
         if (this.requirementObject !== undefined) {
@@ -190,6 +206,10 @@ export default {
         usersService.getAllUsers()
             .then((response) => {
                 this.users = response.map(x => x.source)
+            })
+        projectsService.getAllProjects()
+            .then((response) => {
+                this.projects = response.map(x => x.source)
             })
     },
     methods: {

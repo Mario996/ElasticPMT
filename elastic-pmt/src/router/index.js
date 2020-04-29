@@ -50,6 +50,17 @@ const routes = [
         name: 'statuses',
         component: () => import(/* webpackChunkName: "about" */ '../views/StatusesView.vue')
     },
+    {
+        path: '/project',
+        name: 'project',
+        component: () => import(/* webpackChunkName: "about" */ '../views/AddProjectView.vue'),
+        props: true,
+    },
+    {
+        path: '/list-projects',
+        name: 'list-projects',
+        component: () => import(/* webpackChunkName: "about" */ '../views/ListProjectView.vue')
+    },
 ]
 
 const router = new VueRouter({

@@ -29,8 +29,6 @@ export default {
             })
     },
     methods: {
-        clear () {
-        },
         deleteTask (id) {
             this.tasks = this.tasks.filter(x => x.objectValue.id !== id)
             tasksService.deleteTask(id)
