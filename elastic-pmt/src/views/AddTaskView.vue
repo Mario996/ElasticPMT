@@ -74,7 +74,7 @@
             </ValidationProvider>
             <ValidationProvider v-slot="{ errors }"
                                 name="Task assignee"
-                                rules="required|max:100">
+                                rules="required">
               <v-autocomplete
                 v-model="task.assignee"
                 :error-messages="errors"
@@ -84,6 +84,21 @@
                 item-text="email"
                 item-value="email"
                 label="Task assignee"
+                required
+                return-object />
+            </ValidationProvider>
+            <ValidationProvider v-slot="{ errors }"
+                                name="Task status"
+                                rules="required">
+              <v-autocomplete
+                v-model="task.status"
+                :error-messages="errors"
+                :items="statuses"
+                dense
+                filled
+                item-text="name"
+                item-value="name"
+                label="Task status"
                 required
                 return-object />
             </ValidationProvider>
@@ -140,6 +155,7 @@ import router from '../router/index'
 import CommentComponent from '../components/CommentComponent'
 import { v4 as uuidv4 } from 'uuid'
 import { usersService } from '../services/users-service'
+import { statusesService } from '../services/statuses-service'
 
 setInteractionMode('eager')
 
@@ -172,6 +188,7 @@ export default {
         comment: '',
         mode: 'CREATE',
         users: [],
+        statuses: [],
         taskTypes: ['Bug', 'Story', 'Epic', 'Task', 'Subtask'],
         taskPriorities: ['Blocker', 'Critical', 'Major', 'Minor', 'Trivial']
     }),
@@ -183,6 +200,10 @@ export default {
         usersService.getAllUsers()
             .then((response) => {
                 this.users = response.map(x => x.source)
+            })
+        statusesService.getAllStatuses()
+            .then((response) => {
+                this.statuses = response.map(x => x.source)
             })
     },
     methods: {

@@ -2,30 +2,21 @@
   <v-row align="center"
          justify="center">
     <v-col
-      sm="12"
-      md="8"
-      lg="8">
+      sm="8"
+      md="6"
+      lg="4">
       <v-data-table
         :headers="headers"
-        :items="users"
-        class="elevation-1"
-        :search="search">
+        :items="statuses"
+        class="elevation-1">
         <template v-slot:top>
           <v-toolbar flat
                      color="white">
-            <v-toolbar-title>ElasticPMT users</v-toolbar-title>
+            <v-toolbar-title>Status of tasks</v-toolbar-title>
             <v-divider
               class="mx-4"
               inset
               vertical />
-            <v-col cols="4">
-              <v-text-field
-                v-model="search"
-                append-icon="mdi-magnify"
-                label="Search"
-                single-line
-                hide-details />
-            </v-col>
             <v-spacer />
             <v-dialog v-model="dialog"
                       max-width="500px">
@@ -34,7 +25,7 @@
                        dark
                        class="mb-2"
                        v-on="on">
-                  New User
+                  New Status
                 </v-btn>
               </template>
               <v-card>
@@ -46,28 +37,10 @@
                   <v-container>
                     <v-row>
                       <v-col cols="12"
-                             sm="6"
-                             md="6">
-                        <v-text-field v-model="editedUser.companyId"
-                                      label="Company id" />
-                      </v-col>
-                      <v-col cols="12"
-                             sm="6"
-                             md="6">
-                        <v-text-field v-model="editedUser.email"
-                                      label="Email" />
-                      </v-col>
-                      <v-col cols="12"
-                             sm="6"
-                             md="6">
-                        <v-text-field v-model="editedUser.firstName"
-                                      label="First name" />
-                      </v-col>
-                      <v-col cols="12"
-                             sm="6"
-                             md="6">
-                        <v-text-field v-model="editedUser.lastName"
-                                      label="Last name" />
+                             sm="12"
+                             md="12">
+                        <v-text-field v-model="editedStatus.name"
+                                      label="Name" />
                       </v-col>
                     </v-row>
                   </v-container>
@@ -94,12 +67,12 @@
           <v-icon
             small
             class="mr-2"
-            @click="editUser(item)">
+            @click="editStatus(item)">
             mdi-pencil
           </v-icon>
           <v-icon
             small
-            @click="deleteUser(item)">
+            @click="deleteStatus(item)">
             mdi-delete
           </v-icon>
         </template>
@@ -109,41 +82,33 @@
 </template>
 
 <script>
-import { usersService } from '../services/users-service'
+import { statusesService } from '../services/statuses-service'
 
 export default {
     data: () => ({
-        search: '',
         dialog: false,
         headers: [
             {
-                text: 'Company id',
+                text: 'Name',
                 align: 'start',
-                value: 'companyId',
+                value: 'name',
             },
-            { text: 'Email', value: 'email' },
-            { text: 'First name', value: 'firstName' },
-            { text: 'Last name', value: 'lastName' },
             { text: 'Actions', value: 'actions', sortable: false },
         ],
-        users: [],
+        statuses: [],
         editedIndex: -1,
-        editedUser: {
+        editedStatus: {
             id: '',
-            companyId: '',
-            firstName: '',
-            lastName: '',
+            name: '',
         },
-        defaultUser: {
+        defaultStatus: {
             id: '',
-            companyId: '',
-            firstName: '',
-            lastName: '',
+            name: '',
         },
     }),
     computed: {
         formTitle () {
-            return this.editedIndex === -1 ? 'New User' : 'Edit User'
+            return this.editedIndex === -1 ? 'New Status' : 'Edit Status'
         },
     },
     watch: {
@@ -153,37 +118,38 @@ export default {
         },
     },
     created () {
-        usersService.getAllUsers()
+        statusesService.getAllStatuses()
             .then((response) => {
-                this.users = response.map(x => x.source)
+                this.statuses = response.map(x => x.source)
             })
     },
     methods: {
-        editUser (item) {
-            this.editedIndex = this.users.indexOf(item)
-            this.editedUser = Object.assign({}, item)
+        editStatus (item) {
+            this.editedIndex = this.statuses.indexOf(item)
+            this.editedStatus = Object.assign({}, item)
             this.dialog = true
         },
-        deleteUser (item) {
-            const index = this.users.indexOf(item)
+        deleteStatus (item) {
+            console.log(item)
+            const index = this.statuses.indexOf(item)
             // eslint-disable-next-line no-unused-expressions
-            confirm('Are you sure you want to delete this user?') && this.users.splice(index, 1)
-            usersService.deleteUser(item.id)
+            confirm('Are you sure you want to delete this status?') && this.statuses.splice(index, 1)
+            statusesService.deleteStatus(item.id)
         },
         close () {
             this.dialog = false
             setTimeout(() => {
-                this.editedUser = Object.assign({}, this.defaultUser)
+                this.editedStatus = Object.assign({}, this.defaultStatus)
                 this.editedIndex = -1
             }, 300)
         },
         save () {
             if (this.editedIndex > -1) {
-                Object.assign(this.users[this.editedIndex], this.editedUser)
-                usersService.updateUser(this.editedUser, this.editedUser.id)
+                Object.assign(this.statuses[this.editedIndex], this.editedStatus)
+                statusesService.updateStatus(this.editedStatus, this.editedStatus.id)
             } else {
-                this.users.push(this.editedUser)
-                usersService.createUser(this.editedUser)
+                this.statuses.push(this.editedStatus)
+                statusesService.createStatus(this.editedStatus)
             }
             this.close()
         },

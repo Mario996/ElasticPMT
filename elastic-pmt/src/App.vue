@@ -25,6 +25,13 @@
         dark
         text
         class="mr-2"
+        @click="openStatusesPage">
+        Statuses
+      </v-btn>
+      <v-btn
+        dark
+        text
+        class="mr-2"
         @click="openUsersPage">
         Users
       </v-btn>
@@ -98,6 +105,9 @@ export default {
         },
         openUsersPage () {
             router.push('/users')
+        },
+        openStatusesPage () {
+            router.push('/statuses')
         },
         goHome () {
             router.push('/home')
