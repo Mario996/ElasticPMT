@@ -27,34 +27,42 @@
                 label="Component"
                 required />
             </ValidationProvider>
-            <ValidationProvider v-slot="{ errors }"
-                                name="Task type"
-                                rules="required">
-              <v-select
-                v-model="task.type"
-                :error-messages="errors"
-                :items="taskTypes"
-                label="Task type"
-                dense
-                outlined />
-            </ValidationProvider>
-            <ValidationProvider v-slot="{ errors }"
-                                name="Task priority"
-                                rules="required">
-              <v-select
-                v-model="task.priority"
-                :error-messages="errors"
-                :items="taskPriorities"
-                label="Task priority"
-                dense
-                outlined />
-            </ValidationProvider>
+            <v-row>
+              <v-col class="py-0">
+                <ValidationProvider v-slot="{ errors }"
+                                    name="Task type"
+                                    rules="required">
+                  <v-select
+                    v-model="task.type"
+                    :error-messages="errors"
+                    :items="taskTypes"
+                    label="Task type"
+                    dense
+                    outlined />
+                </ValidationProvider>
+              </v-col>
+              <v-col class="py-0">
+                <ValidationProvider v-slot="{ errors }"
+                                    name="Task priority"
+                                    rules="required">
+                  <v-select
+                    v-model="task.priority"
+                    :error-messages="errors"
+                    :items="taskPriorities"
+                    label="Task priority"
+                    dense
+                    outlined />
+                </ValidationProvider>
+              </v-col>
+            </v-row>
             <ValidationProvider v-slot="{ errors }"
                                 name="Task environment"
                                 rules="required|max:500|min:10">
               <v-textarea
                 v-model="task.environment"
                 solo
+                no-resize
+                height="8vh"
                 name="input-7-4"
                 label="Task environment"
                 :error-messages="errors"
@@ -66,42 +74,50 @@
               <v-textarea
                 v-model="task.description"
                 solo
+                no-resize
+                height="8vh"
                 name="input-7-4"
                 label="Task description"
                 required
                 :error-messages="errors"
                 :counter="500" />
             </ValidationProvider>
-            <ValidationProvider v-slot="{ errors }"
-                                name="Task assignee"
-                                rules="required">
-              <v-autocomplete
-                v-model="task.assignee"
-                :error-messages="errors"
-                :items="users"
-                dense
-                filled
-                item-text="email"
-                item-value="email"
-                label="Task assignee"
-                required
-                return-object />
-            </ValidationProvider>
-            <ValidationProvider v-slot="{ errors }"
-                                name="Task status"
-                                rules="required">
-              <v-autocomplete
-                v-model="task.status"
-                :error-messages="errors"
-                :items="statuses"
-                dense
-                filled
-                item-text="name"
-                item-value="name"
-                label="Task status"
-                required
-                return-object />
-            </ValidationProvider>
+            <v-row>
+              <v-col class="py-0">
+                <ValidationProvider v-slot="{ errors }"
+                                    name="Task assignee"
+                                    rules="required">
+                  <v-autocomplete
+                    v-model="task.assignee"
+                    :error-messages="errors"
+                    :items="users"
+                    dense
+                    outlined
+                    item-text="email"
+                    item-value="email"
+                    label="Task assignee"
+                    required
+                    return-object />
+                </ValidationProvider>
+              </v-col>
+              <v-col class="py-0">
+                <ValidationProvider v-slot="{ errors }"
+                                    name="Task status"
+                                    rules="required">
+                  <v-autocomplete
+                    v-model="task.status"
+                    :error-messages="errors"
+                    :items="statuses"
+                    dense
+                    outlined
+                    item-text="name"
+                    item-value="name"
+                    label="Task status"
+                    required
+                    return-object />
+                </ValidationProvider>
+              </v-col>
+            </v-row>
             <v-row justify="center">
               <v-btn class="mr-4"
                      width="300"
@@ -127,6 +143,7 @@
               <v-textarea
                 v-model="comment"
                 solo
+                no-resize
                 height="8vh"
                 name="input-7-4"
                 label="Comment"

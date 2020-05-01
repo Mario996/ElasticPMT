@@ -4,6 +4,7 @@
            class="py-0 pl-3">
       <v-textarea
         v-model="comment.text"
+        :disabled="!editing"
         solo
         no-resize
         height="8vh"
@@ -13,10 +14,17 @@
     </v-col>
     <v-col cols="1"
            class="py-0 pl-1">
-      <v-btn small
+      <v-btn v-show="!editing"
+             small
              rounded
              @click="editComment">
         <v-icon>mdi-pencil</v-icon>
+      </v-btn>
+      <v-btn v-show="editing"
+             small
+             rounded
+             @click="saveEdit">
+        <v-icon>mdi-content-save</v-icon>
       </v-btn>
     </v-col>
     <v-col cols="1"
@@ -37,9 +45,14 @@ export default {
         comment: { type: Object, default: () => {} },
     },
     data: () => ({
+        editing: false,
     }),
     methods: {
         editComment () {
+            this.editing = true
+        },
+        saveEdit () {
+            this.editing = false
             this.$emit('update-comment', this.comment)
         },
         deleteComment () {

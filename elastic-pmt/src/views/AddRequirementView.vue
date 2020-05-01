@@ -18,25 +18,47 @@
                 label="Requirement name"
                 required />
             </ValidationProvider>
-            <ValidationProvider v-slot="{ errors }"
-                                name="Project"
-                                rules="required">
-              <v-select
-                v-model="requirement.project"
-                :error-messages="errors"
-                :items="projects"
-                label="Project"
-                item-text="name"
-                item-value="name"
-                dense
-                outlined
-                return-object />
-            </ValidationProvider>
+            <v-row>
+              <v-col class="py-0">
+                <ValidationProvider v-slot="{ errors }"
+                                    name="Project"
+                                    rules="required">
+                  <v-select
+                    v-model="requirement.project"
+                    :error-messages="errors"
+                    :items="projects"
+                    label="Project"
+                    item-text="name"
+                    item-value="name"
+                    dense
+                    outlined
+                    return-object />
+                </ValidationProvider>
+              </v-col>
+              <v-col class="py-0">
+                <ValidationProvider v-slot="{ errors }"
+                                    name="Requirement author"
+                                    rules="required|max:100">
+                  <v-autocomplete
+                    v-model="requirement.author"
+                    :error-messages="errors"
+                    :items="users"
+                    dense
+                    outlined
+                    item-text="email"
+                    item-value="email"
+                    label="Requirement author"
+                    required
+                    return-object />
+                </ValidationProvider>
+              </v-col>
+            </v-row>
             <ValidationProvider v-slot="{ errors }"
                                 name="Requirement version"
                                 rules="required|max:10">
               <v-text-field
                 v-model="requirement.version"
+                class="pt-0"
                 :error-messages="errors"
                 label="Requirement version"
                 required />
@@ -47,6 +69,7 @@
               <v-textarea
                 v-model="requirement.description"
                 solo
+                no-resize
                 name="input-7-4"
                 label="Requirement description"
                 height="8vh"
@@ -60,55 +83,41 @@
               <v-textarea
                 v-model="requirement.rationale"
                 solo
+                no-resize
                 name="input-7-4"
                 height="8vh"
                 label="Requirement rationale"
                 :error-messages="errors"
                 :counter="500" />
             </ValidationProvider>
-            <ValidationProvider v-slot="{ errors }"
-                                name="Requirement type"
-                                rules="required">
-              <v-radio-group v-model="requirement.type"
-                             row
-                             :error-messages="errors"
-                             label="Requirement type:">
-                <v-radio label="Functional requirement"
-                         value="Functional requirement" />
-                <v-radio label="Nonfunctional requirement"
-                         value="Nonfunctional requirement" />
-              </v-radio-group>
-            </ValidationProvider>
-            <ValidationProvider v-slot="{ errors }"
-                                name="Requirement status"
-                                rules="required">
-              <v-radio-group v-model="requirement.status"
-                             row
-                             :error-messages="errors"
-                             label="Requirement status:">
-                <v-radio label="Waiting for revision"
-                         value="Waiting for revision" />
-                <v-radio label="Approved"
-                         value="Approved" />
-                <v-radio label="Declined"
-                         value="Declined" />
-              </v-radio-group>
-            </ValidationProvider>
-            <ValidationProvider v-slot="{ errors }"
-                                name="Requirement author"
-                                rules="required|max:100">
-              <v-autocomplete
-                v-model="requirement.author"
-                :error-messages="errors"
-                :items="users"
-                dense
-                filled
-                item-text="email"
-                item-value="email"
-                label="Requirement author"
-                required
-                return-object />
-            </ValidationProvider>
+            <v-row>
+              <v-col class="py-0">
+                <ValidationProvider v-slot="{ errors }"
+                                    name="Requirement type"
+                                    rules="required">
+                  <v-select
+                    v-model="requirement.type"
+                    :error-messages="errors"
+                    :items="requirementTypes"
+                    label="Requirement type"
+                    dense
+                    outlined />
+                </ValidationProvider>
+              </v-col>
+              <v-col class="py-0">
+                <ValidationProvider v-slot="{ errors }"
+                                    name="Requirement status"
+                                    rules="required">
+                  <v-select
+                    v-model="requirement.status"
+                    :error-messages="errors"
+                    :items="requirementStatuses"
+                    label="Requirement status"
+                    dense
+                    outlined />
+                </ValidationProvider>
+              </v-col>
+            </v-row>
             <v-row justify="center">
               <v-btn
                 class="mr-4"
@@ -138,6 +147,7 @@
                 height="8vh"
                 name="input-7-4"
                 label="Comment"
+                no-resize
                 :counter="500" />
             </v-col>
             <v-col cols="2">
@@ -195,6 +205,8 @@ export default {
         requirement: {},
         mode: 'CREATE',
         comment: '',
+        requirementTypes: ['Functional requirement', 'Nonfunctional requirement'],
+        requirementStatuses: ['Waiting for revision', 'Approved', 'Declined'],
         users: [],
         projects: [],
     }),

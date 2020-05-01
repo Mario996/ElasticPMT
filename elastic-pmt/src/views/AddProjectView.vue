@@ -55,7 +55,7 @@
                 :error-messages="errors"
                 :items="users"
                 dense
-                filled
+                outlined
                 item-text="email"
                 item-value="email"
                 label="Project manager"
