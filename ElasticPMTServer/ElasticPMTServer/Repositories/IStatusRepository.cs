@@ -3,14 +3,8 @@ using Status = ElasticPMTServer.Models.Status;
 
 namespace ElasticPMTServer.Repositories
 {
-    public interface IStatusRepository
+    public interface IStatusRepository : IRepository<Status>
     {
-        IndexResponse createStatus(Status status);
-        ISearchResponse<Status> getStatuses();
-        GetResponse<Status> getStatusById(string id);
-        UpdateResponse<Status> updateStatus(string id, Status status);
-        bool checkIfIndexExists();
-        CreateIndexResponse createIndex();
-        DeleteResponse deleteStatus(string id);
+
     }
 }

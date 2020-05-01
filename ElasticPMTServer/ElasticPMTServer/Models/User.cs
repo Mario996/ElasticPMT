@@ -5,9 +5,8 @@ using System.Threading.Tasks;
 
 namespace ElasticPMTServer.Models
 {
-    public class User
+    public class User : ElasticSearchType
     {
-        public Guid Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string CompanyId { get; set; }

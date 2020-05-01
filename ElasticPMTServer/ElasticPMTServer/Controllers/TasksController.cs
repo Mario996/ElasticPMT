@@ -9,9 +9,9 @@ namespace ElasticPMTServer.Controllers
     public class TasksController : ControllerBase
     {
 
-        private readonly ITaskRepository _taskRepository;
+        private readonly IRepository<Task> _taskRepository;
 
-        public TasksController(ITaskRepository taskRepository)
+        public TasksController(IRepository<Task> taskRepository)
         {
             _taskRepository = taskRepository;
         }
@@ -20,7 +20,7 @@ namespace ElasticPMTServer.Controllers
         [HttpGet]
         public IActionResult GetAllTasks()
         {
-            var result = _taskRepository.getTasks().Hits;
+            var result = _taskRepository.getAll().Hits;
             return Ok(result);
         }
 
@@ -28,7 +28,7 @@ namespace ElasticPMTServer.Controllers
         [HttpGet("{id}")]
         public IActionResult GetTaskById(string id)
         {
-            var result = _taskRepository.getTaskById(id);
+            var result = _taskRepository.getById(id);
             return Ok(result);
         }
 
@@ -36,7 +36,7 @@ namespace ElasticPMTServer.Controllers
         [HttpPost]
         public IActionResult createTask([FromBody] Task task)
         {
-            var result = _taskRepository.createTask(task);
+            var result = _taskRepository.create(task);
             if (result == null)
             {
                 return BadRequest();
@@ -48,7 +48,7 @@ namespace ElasticPMTServer.Controllers
         [HttpPut("{id}")]
         public IActionResult updateTask(string id, [FromBody] Task task)
         {
-            var result = _taskRepository.updateTask(id, task);
+            var result = _taskRepository.update(id, task);
             return Ok(result);
         }
 
@@ -56,7 +56,7 @@ namespace ElasticPMTServer.Controllers
         [HttpDelete("{id}")]
         public IActionResult deleteTask(string id)
         {
-            var result = _taskRepository.deleteTask(id);
+            var result = _taskRepository.delete(id);
             return Ok(result);
         }
     }

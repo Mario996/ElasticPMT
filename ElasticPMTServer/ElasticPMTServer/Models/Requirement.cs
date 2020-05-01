@@ -3,9 +3,8 @@ using System.Collections.Generic;
 
 namespace ElasticPMTServer.Models
 {
-    public class Requirement
+    public class Requirement : ElasticSearchType
     {
-        public Guid Id { get; set; }
         public string Name { get; set; }
         public string Version { get; set; }
         public string Description { get; set; }

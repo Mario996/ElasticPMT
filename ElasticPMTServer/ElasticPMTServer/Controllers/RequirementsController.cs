@@ -9,9 +9,9 @@ namespace ElasticPMTServer.Controllers
     public class RequirementsController : ControllerBase
     {
 
-        private readonly IRequirementRepository _requirementRepository;
+        private readonly IRepository<Requirement> _requirementRepository;
 
-        public RequirementsController(IRequirementRepository requirementRepository)
+        public RequirementsController(IRepository<Requirement> requirementRepository)
         { 
             _requirementRepository = requirementRepository;
         }
@@ -20,7 +20,7 @@ namespace ElasticPMTServer.Controllers
         [HttpGet]
         public IActionResult GetAllRequirements()
         {
-            var result = _requirementRepository.getRequirements().Hits;
+            var result = _requirementRepository.getAll().Hits;
             return Ok(result);
         }
 
@@ -28,7 +28,7 @@ namespace ElasticPMTServer.Controllers
         [HttpGet("{id}")]
         public IActionResult GetRequirementById(string id)
         {
-            var result = _requirementRepository.getRequirementById(id);
+            var result = _requirementRepository.getById(id);
             return Ok(result);
         }
 
@@ -36,7 +36,7 @@ namespace ElasticPMTServer.Controllers
         [HttpPost]
         public IActionResult createRequirement([FromBody] Requirement requirement)
         {
-            var result = _requirementRepository.createRequirement(requirement);
+            var result = _requirementRepository.create(requirement);
             if(result == null)
             {
                 return BadRequest();
@@ -48,7 +48,7 @@ namespace ElasticPMTServer.Controllers
         [HttpPut("{id}")]
         public IActionResult updateRequirement(string id, [FromBody] Requirement requirement)
         {
-            var result = _requirementRepository.updateRequirement(id, requirement);
+            var result = _requirementRepository.update(id, requirement);
             return Ok(result);
         }
 
@@ -56,7 +56,7 @@ namespace ElasticPMTServer.Controllers
         [HttpDelete("{id}")]
         public IActionResult deleteRequirement(string id)
         {
-            var result = _requirementRepository.deleteRequirement(id);
+            var result = _requirementRepository.delete(id);
             return Ok(result);
         }
     }

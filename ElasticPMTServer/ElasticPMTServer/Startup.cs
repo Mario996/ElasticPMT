@@ -1,4 +1,5 @@
-﻿using ElasticPMTServer.Repositories;
+﻿using ElasticPMTServer.Models;
+using ElasticPMTServer.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -20,11 +21,11 @@ namespace ElasticPMTServer
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            services.AddSingleton<IRequirementRepository, RequirementRepository>();
-            services.AddSingleton<ITaskRepository, TaskRepository>();
-            services.AddSingleton<IUserRepository, UserRepository>();
-            services.AddSingleton<IStatusRepository, StatusRepository>();
-            services.AddSingleton<IProjectRepository, ProjectRepository>();
+            services.AddSingleton<IRepository<Requirement>, RequirementRepository>();
+            services.AddSingleton<IRepository<Task>, TaskRepository>();
+            services.AddSingleton<IRepository<User>, UserRepository>();
+            services.AddSingleton<IRepository<Status>, StatusRepository>();
+            services.AddScoped<IRepository<Project>, ProjectRepository>();
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy",

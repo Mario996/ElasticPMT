@@ -8,9 +8,9 @@ namespace ElasticPMTServer.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IRepository<User> _userRepository;
 
-        public UsersController(IUserRepository userRepository)
+        public UsersController(IRepository<User> userRepository)
         {
             _userRepository = userRepository;
         }
@@ -19,7 +19,7 @@ namespace ElasticPMTServer.Controllers
         [HttpGet]
         public IActionResult GetAllUsers()
         {
-            var result = _userRepository.getUsers().Hits;
+            var result = _userRepository.getAll().Hits;
             return Ok(result);
         }
 
@@ -27,7 +27,7 @@ namespace ElasticPMTServer.Controllers
         [HttpGet("{id}")]
         public IActionResult GetUserById(string id)
         {
-            var result = _userRepository.getUserById(id);
+            var result = _userRepository.getById(id);
             return Ok(result);
         }
 
@@ -35,7 +35,7 @@ namespace ElasticPMTServer.Controllers
         [HttpPost]
         public IActionResult createUser([FromBody] User user)
         {
-            var result = _userRepository.createUser(user);
+            var result = _userRepository.create(user);
             if (result == null)
             {
                 return BadRequest();
@@ -47,7 +47,7 @@ namespace ElasticPMTServer.Controllers
         [HttpPut("{id}")]
         public IActionResult updateUser(string id, [FromBody] User user)
         {
-            var result = _userRepository.updateUser(id, user);
+            var result = _userRepository.update(id, user);
             return Ok(result);
         }
 
@@ -55,7 +55,7 @@ namespace ElasticPMTServer.Controllers
         [HttpDelete("{id}")]
         public IActionResult deleteUser(string id)
         {
-            var result = _userRepository.deleteUser(id);
+            var result = _userRepository.delete(id);
             return Ok(result);
         }
     }

@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace ElasticPMTServer.Models
 {
-    public class Status : ElasticSearchType
+    public interface IElasticSearchType
     {
-        public string Name { get; set; }
+         Guid Id { get; set; }
     }
 }

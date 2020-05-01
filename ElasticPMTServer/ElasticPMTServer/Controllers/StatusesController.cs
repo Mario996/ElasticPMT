@@ -13,9 +13,9 @@ namespace ElasticPMTServer.Controllers
     [ApiController]
     public class StatusesController : ControllerBase
     {
-        private readonly IStatusRepository _statusRepository;
+        private readonly IRepository<Status> _statusRepository;
 
-        public StatusesController(IStatusRepository statusRepository)
+        public StatusesController(IRepository<Status> statusRepository)
         {
             _statusRepository = statusRepository;
         }
@@ -24,7 +24,7 @@ namespace ElasticPMTServer.Controllers
         [HttpGet]
         public IActionResult GetAllStatuses()
         {
-            var result = _statusRepository.getStatuses().Hits;
+            var result = _statusRepository.getAll().Hits;
             return Ok(result);
         }
 
@@ -32,7 +32,7 @@ namespace ElasticPMTServer.Controllers
         [HttpGet("{id}")]
         public IActionResult GetStatusById(string id)
         {
-            var result = _statusRepository.getStatusById(id);
+            var result = _statusRepository.getById(id);
             return Ok(result);
         }
 
@@ -40,7 +40,7 @@ namespace ElasticPMTServer.Controllers
         [HttpPost]
         public IActionResult createStatus([FromBody] Status status)
         {
-            var result = _statusRepository.createStatus(status);
+            var result = _statusRepository.create(status);
             if (result == null)
             {
                 return BadRequest();
@@ -52,7 +52,7 @@ namespace ElasticPMTServer.Controllers
         [HttpPut("{id}")]
         public IActionResult updateStatus(string id, [FromBody] Status status)
         {
-            var result = _statusRepository.updateStatus(id, status);
+            var result = _statusRepository.update(id, status);
             return Ok(result);
         }
 
@@ -60,7 +60,7 @@ namespace ElasticPMTServer.Controllers
         [HttpDelete("{id}")]
         public IActionResult deleteStatus(string id)
         {
-            var result = _statusRepository.deleteStatus(id);
+            var result = _statusRepository.delete(id);
             return Ok(result);
         }
     }

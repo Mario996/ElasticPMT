@@ -8,9 +8,9 @@ namespace ElasticPMTServer.Controllers
     [ApiController]
     public class ProjectsController : ControllerBase
     {
-        private readonly IProjectRepository _projectRepository;
+        private readonly IRepository<Project> _projectRepository;
 
-        public ProjectsController(IProjectRepository projectRepository)
+        public ProjectsController(IRepository<Project> projectRepository)
         {
             _projectRepository = projectRepository;
         }
@@ -19,7 +19,7 @@ namespace ElasticPMTServer.Controllers
         [HttpGet]
         public IActionResult GetAllProjects()
         {
-            var result = _projectRepository.getProjects().Hits;
+            var result = _projectRepository.getAll().Hits;
             return Ok(result);
         }
 
@@ -27,7 +27,7 @@ namespace ElasticPMTServer.Controllers
         [HttpGet("{id}")]
         public IActionResult GetProjectById(string id)
         {
-            var result = _projectRepository.getProjectById(id);
+            var result = _projectRepository.getById(id);
             return Ok(result);
         }
 
@@ -35,7 +35,7 @@ namespace ElasticPMTServer.Controllers
         [HttpPost]
         public IActionResult createProject([FromBody] Project project)
         {
-            var result = _projectRepository.createProject(project);
+            var result = _projectRepository.create(project);
             if (result == null)
             {
                 return BadRequest();
@@ -47,7 +47,7 @@ namespace ElasticPMTServer.Controllers
         [HttpPut("{id}")]
         public IActionResult updateProject(string id, [FromBody] Project project)
         {
-            var result = _projectRepository.updateProject(id, project);
+            var result = _projectRepository.update(id, project);
             return Ok(result);
         }
 
@@ -55,7 +55,7 @@ namespace ElasticPMTServer.Controllers
         [HttpDelete("{id}")]
         public IActionResult deleteProject(string id)
         {
-            var result = _projectRepository.deleteProject(id);
+            var result = _projectRepository.delete(id);
             return Ok(result);
         }
     }
