@@ -37,9 +37,11 @@ async function createTask (task) {
             Type: task.type,
             Priority: task.priority,
             Assignee: task.assignee,
+            Creator: task.creator,
             Environment: task.environment,
             Description: task.description,
             Status: task.status,
+            Requirement: task.requirement,
             Comments: [],
         }),
     }
@@ -61,9 +63,11 @@ async function updateTask (task, id) {
             Type: task.type,
             Priority: task.priority,
             Assignee: task.assignee,
+            Creator: task.creator,
             Environment: task.environment,
             Description: task.description,
             Comments: task.comments,
+            Requirement: task.requirement,
             Status: task.status
         }),
     }

@@ -61,3 +61,9 @@ export default {
     },
 }
 </script>
+
+<style>
+.theme--light.v-input--is-disabled input, .theme--light.v-input--is-disabled textarea{
+    color: black;
+}
+</style>

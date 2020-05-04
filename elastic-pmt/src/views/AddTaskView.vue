@@ -102,6 +102,25 @@
               </v-col>
               <v-col class="py-0">
                 <ValidationProvider v-slot="{ errors }"
+                                    name="Task creator"
+                                    rules="required">
+                  <v-autocomplete
+                    v-model="task.creator"
+                    :error-messages="errors"
+                    :items="users"
+                    dense
+                    outlined
+                    item-text="email"
+                    item-value="email"
+                    label="Task creator"
+                    required
+                    return-object />
+                </ValidationProvider>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col class="py-0">
+                <ValidationProvider v-slot="{ errors }"
                                     name="Task status"
                                     rules="required">
                   <v-autocomplete
@@ -116,6 +135,17 @@
                     required
                     return-object />
                 </ValidationProvider>
+              </v-col>
+              <v-col class="py-0">
+                <v-autocomplete
+                  v-model="task.requirement"
+                  :items="requirements"
+                  dense
+                  outlined
+                  item-text="name"
+                  item-value="name"
+                  label="Requirement"
+                  return-object />
               </v-col>
             </v-row>
             <v-row justify="center">
@@ -172,6 +202,7 @@ import router from '../router/index'
 import CommentComponent from '../components/CommentComponent'
 import { v4 as uuidv4 } from 'uuid'
 import { usersService } from '../services/users-service'
+import { requirementsService } from '../services/requirements-service'
 import { statusesService } from '../services/statuses-service'
 
 setInteractionMode('eager')
@@ -206,6 +237,7 @@ export default {
         mode: 'CREATE',
         users: [],
         statuses: [],
+        requirements: [],
         taskTypes: ['Bug', 'Story', 'Epic', 'Task', 'Subtask'],
         taskPriorities: ['Blocker', 'Critical', 'Major', 'Minor', 'Trivial']
     }),
@@ -221,6 +253,10 @@ export default {
         statusesService.getAllStatuses()
             .then((response) => {
                 this.statuses = response.map(x => x.source)
+            })
+        requirementsService.getAllRequirements()
+            .then((response) => {
+                this.requirements = response.map(x => x.source)
             })
     },
     methods: {
