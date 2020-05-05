@@ -27,6 +27,10 @@ export default {
                     }
                 })
             })
+        tasksService.orderByCreator()
+            .then((response) => {
+                console.log(response)
+            })
     },
     methods: {
         deleteTask (id) {

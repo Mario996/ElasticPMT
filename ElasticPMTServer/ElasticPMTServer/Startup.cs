@@ -21,11 +21,12 @@ namespace ElasticPMTServer
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            services.AddSingleton<IRepository<Requirement>, RequirementRepository>();
-            services.AddSingleton<IRepository<Task>, TaskRepository>();
-            services.AddSingleton<IRepository<User>, UserRepository>();
-            services.AddSingleton<IRepository<Status>, StatusRepository>();
-            services.AddScoped<IRepository<Project>, ProjectRepository>();
+            services.AddSingleton<IRequirementRepository, RequirementRepository>();
+            services.AddSingleton<ITaskRepository, TaskRepository>();
+            services.AddSingleton<IUserRepository, UserRepository>();
+            services.AddSingleton<IStatusRepository, StatusRepository>();
+            services.AddSingleton<IProjectRepository, ProjectRepository>();
+            services.AddSingleton<IPriorityRepository, PriorityRepository>();
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy",

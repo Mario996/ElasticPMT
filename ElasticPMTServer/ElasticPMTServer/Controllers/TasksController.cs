@@ -9,9 +9,9 @@ namespace ElasticPMTServer.Controllers
     public class TasksController : ControllerBase
     {
 
-        private readonly IRepository<Task> _taskRepository;
+        private readonly ITaskRepository _taskRepository;
 
-        public TasksController(IRepository<Task> taskRepository)
+        public TasksController(ITaskRepository taskRepository)
         {
             _taskRepository = taskRepository;
         }
@@ -29,6 +29,15 @@ namespace ElasticPMTServer.Controllers
         public IActionResult GetTaskById(string id)
         {
             var result = _taskRepository.getById(id);
+            return Ok(result);
+        }
+
+        // GET: tasks/reports/orderbycreator
+        [HttpGet("reports/orderbycreator")]
+        public IActionResult OrderTasksByCreator()
+        {
+            var result = _taskRepository.orderTasksPerCreator();
+
             return Ok(result);
         }
 

@@ -11,6 +11,7 @@ namespace ElasticPMTServer.Models
         public string Rationale { get; set; }
         public string Type { get; set; }
         public string Status { get; set; }
+        public Priority Priority { get; set; }
         public List<Comment> Comments { get; set; } = new List<Comment>();
         public User Author { get; set; }
         public Project Project { get; set; }

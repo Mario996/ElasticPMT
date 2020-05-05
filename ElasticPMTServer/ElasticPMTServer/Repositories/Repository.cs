@@ -6,7 +6,7 @@ namespace ElasticPMTServer.Repositories
 {
     public class Repository<TEntity> : IRepository<TEntity> where TEntity : ElasticSearchType
     {
-        private readonly ElasticClient _elasticClient;
+        protected readonly ElasticClient _elasticClient;
         private readonly ConnectionSettings _settings;
         private readonly string _indexName;
 
@@ -53,6 +53,7 @@ namespace ElasticPMTServer.Repositories
                            .Properties(ps => ps
                                    .Nested<Comment>(n => n
                                        .Name(nn => nn.Comments)
+                                       .Name(nn => nn.Labels)
                                    )
                            )
                        ));

@@ -1,7 +1,4 @@
 ﻿using ElasticPMTServer.Models;
-using Elasticsearch.Net;
-using Nest;
-using System.Collections.Generic;
 
 namespace ElasticPMTServer.Repositories
 {

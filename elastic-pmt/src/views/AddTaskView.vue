@@ -18,15 +18,26 @@
                 label="Task summary"
                 required />
             </ValidationProvider>
-            <ValidationProvider v-slot="{ errors }"
-                                name="Component"
-                                rules="required|max:20">
-              <v-text-field
-                v-model="task.component"
-                :error-messages="errors"
-                label="Component"
-                required />
-            </ValidationProvider>
+            <v-row>
+              <v-col class="py-0">
+                <ValidationProvider v-slot="{ errors }"
+                                    name="Component"
+                                    rules="required|max:20">
+                  <v-text-field
+                    v-model="task.component"
+                    :error-messages="errors"
+                    label="Component"
+                    required />
+                </ValidationProvider>
+              </v-col>
+              <v-col class="py-0">
+                <v-combobox
+                  v-model="task.labels"
+                  label="Labels"
+                  multiple
+                  chips />
+              </v-col>
+            </v-row>
             <v-row>
               <v-col class="py-0">
                 <ValidationProvider v-slot="{ errors }"
@@ -239,7 +250,7 @@ export default {
         statuses: [],
         requirements: [],
         taskTypes: ['Bug', 'Story', 'Epic', 'Task', 'Subtask'],
-        taskPriorities: ['Blocker', 'Critical', 'Major', 'Minor', 'Trivial']
+        taskPriorities: ['Blocker', 'Critical', 'Major', 'Minor', 'Trivial'],
     }),
     created () {
         if (this.taskObject !== undefined) {
@@ -258,17 +269,20 @@ export default {
             .then((response) => {
                 this.requirements = response.map(x => x.source)
             })
+        this.task.labels = this.task.labels.map(x => x.name)
     },
     methods: {
         submitForm () {
             this.$refs.observer.validate().then((result) => {
                 if (result) {
                     if (this.mode === 'UPDATE') {
+                        this.task.labels = this.task.labels.map(x => { return { name: x, id: uuidv4() } })
                         tasksService.updateTask(this.task, this.task.id)
                             .then(() => {
                                 router.push('/list-tasks')
                             })
                     } else {
+                        this.task.labels = this.task.labels.map(x => { return { name: x, id: uuidv4() } })
                         tasksService.createTask(this.task)
                             .then(() => {
                                 router.push('/list-tasks')

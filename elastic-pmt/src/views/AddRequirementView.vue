@@ -53,16 +53,37 @@
                 </ValidationProvider>
               </v-col>
             </v-row>
-            <ValidationProvider v-slot="{ errors }"
-                                name="Requirement version"
-                                rules="required|max:10">
-              <v-text-field
-                v-model="requirement.version"
-                class="pt-0"
-                :error-messages="errors"
-                label="Requirement version"
-                required />
-            </ValidationProvider>
+            <v-row>
+              <v-col class="py-0">
+                <ValidationProvider v-slot="{ errors }"
+                                    name="Requirement version"
+                                    rules="required|max:10">
+                  <v-text-field
+                    v-model="requirement.version"
+                    class="pt-0"
+                    :error-messages="errors"
+                    label="Requirement version"
+                    required />
+                </ValidationProvider>
+              </v-col>
+              <v-col class="py-0">
+                <ValidationProvider v-slot="{ errors }"
+                                    name="Requirement priority"
+                                    rules="required">
+                  <v-autocomplete
+                    v-model="requirement.priority"
+                    :error-messages="errors"
+                    :items="priorities"
+                    dense
+                    outlined
+                    item-text="name"
+                    item-value="name"
+                    label="Requirement priority"
+                    required
+                    return-object />
+                </ValidationProvider>
+              </v-col>
+            </v-row>
             <ValidationProvider v-slot="{ errors }"
                                 name="Requirement description"
                                 rules="required|max:500|min:10">
@@ -174,6 +195,7 @@ import router from '../router/index'
 import { v4 as uuidv4 } from 'uuid'
 import { usersService } from '../services/users-service'
 import { projectsService } from '../services/projects-service'
+import { prioritiesService } from '../services/priorities-service'
 
 setInteractionMode('eager')
 
@@ -209,6 +231,7 @@ export default {
         requirementStatuses: ['Waiting for revision', 'Approved', 'Declined'],
         users: [],
         projects: [],
+        priorities: [],
     }),
     created () {
         if (this.requirementObject !== undefined) {
@@ -222,6 +245,10 @@ export default {
         projectsService.getAllProjects()
             .then((response) => {
                 this.projects = response.map(x => x.source)
+            })
+        prioritiesService.getAllPriorities()
+            .then((response) => {
+                this.priorities = response.map(x => x.source)
             })
     },
     methods: {

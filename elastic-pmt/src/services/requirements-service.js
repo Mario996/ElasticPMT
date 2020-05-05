@@ -40,6 +40,7 @@ async function createRequirement (requirement) {
             Status: requirement.status,
             Author: requirement.author,
             Project: requirement.project,
+            Priority: requirement.priority,
             Comments: [],
         }),
     }
@@ -64,6 +65,7 @@ async function updateRequirement (requirement, id) {
             Status: requirement.status,
             Author: requirement.author,
             Project: requirement.project,
+            Priority: requirement.priority,
             Comments: requirement.comments,
         }),
     }

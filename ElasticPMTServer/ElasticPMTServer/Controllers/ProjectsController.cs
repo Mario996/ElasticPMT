@@ -8,9 +8,9 @@ namespace ElasticPMTServer.Controllers
     [ApiController]
     public class ProjectsController : ControllerBase
     {
-        private readonly IRepository<Project> _projectRepository;
+        private readonly IProjectRepository _projectRepository;
 
-        public ProjectsController(IRepository<Project> projectRepository)
+        public ProjectsController(IProjectRepository projectRepository)
         {
             _projectRepository = projectRepository;
         }

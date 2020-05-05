@@ -25,6 +25,13 @@
         dark
         text
         class="mr-2"
+        @click="openPrioritiesPage">
+        Priorities
+      </v-btn>
+      <v-btn
+        dark
+        text
+        class="mr-2"
         @click="openStatusesPage">
         Statuses
       </v-btn>
@@ -131,6 +138,9 @@ export default {
         },
         openStatusesPage () {
             router.push('/statuses')
+        },
+        openPrioritiesPage () {
+            router.push('/priorities')
         },
         goHome () {
             router.push('/home')

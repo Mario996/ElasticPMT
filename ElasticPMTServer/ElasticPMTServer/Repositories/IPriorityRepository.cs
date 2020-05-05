@@ -2,7 +2,7 @@
 
 namespace ElasticPMTServer.Repositories
 {
-    public interface IRequirementRepository : IRepository<Requirement>
+    public interface IPriorityRepository : IRepository<Priority>
     {
     }
 }

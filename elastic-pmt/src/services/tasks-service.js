@@ -12,6 +12,18 @@ async function getAllTasks () {
         .then(response => response.json())
 }
 
+async function orderByCreator () {
+    const requestOptions = {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }
+
+    return fetch('https://localhost:44332/tasks/reports/orderbycreator', requestOptions)
+        .then(response => response.json())
+}
+
 async function getTaskById (id) {
     const requestOptions = {
         method: 'GET',
@@ -42,6 +54,7 @@ async function createTask (task) {
             Description: task.description,
             Status: task.status,
             Requirement: task.requirement,
+            Labels: task.labels,
             Comments: [],
         }),
     }
@@ -68,6 +81,7 @@ async function updateTask (task, id) {
             Description: task.description,
             Comments: task.comments,
             Requirement: task.requirement,
+            Labels: task.labels,
             Status: task.status
         }),
     }
@@ -94,4 +108,5 @@ export const tasksService = {
     getTaskById,
     deleteTask,
     updateTask,
+    orderByCreator,
 }

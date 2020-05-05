@@ -1,5 +1,4 @@
 ﻿using ElasticPMTServer.Models;
-using Nest;
 
 namespace ElasticPMTServer.Repositories
 {

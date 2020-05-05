@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using ElasticPMTServer.Models;
+﻿using ElasticPMTServer.Models;
 using ElasticPMTServer.Repositories;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ElasticPMTServer.Controllers
@@ -13,9 +8,9 @@ namespace ElasticPMTServer.Controllers
     [ApiController]
     public class StatusesController : ControllerBase
     {
-        private readonly IRepository<Status> _statusRepository;
+        private readonly IStatusRepository _statusRepository;
 
-        public StatusesController(IRepository<Status> statusRepository)
+        public StatusesController(IStatusRepository statusRepository)
         {
             _statusRepository = statusRepository;
         }

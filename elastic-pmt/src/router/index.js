@@ -61,6 +61,11 @@ const routes = [
         name: 'list-projects',
         component: () => import(/* webpackChunkName: "about" */ '../views/ListProjectView.vue')
     },
+    {
+        path: '/priorities',
+        name: 'priorities',
+        component: () => import(/* webpackChunkName: "about" */ '../views/PrioritiesView.vue')
+    },
 ]
 
 const router = new VueRouter({

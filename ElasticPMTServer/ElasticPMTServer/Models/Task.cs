@@ -7,10 +7,11 @@ namespace ElasticPMTServer.Models
     {
         public string Type { get; set; }
         public string Summary { get; set; }
-        public string Priority { get; set; }
         public string Environment { get; set; }
         public string Component { get; set; }
         public string Description { get; set; }
+        public string Priority { get; set; }
+        public List<Label> Labels { get; set; }
         public Status Status { get; set; }
         public User Assignee { get; set; }
         public User Creator { get; set; }

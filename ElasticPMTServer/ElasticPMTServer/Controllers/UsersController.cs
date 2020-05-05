@@ -8,9 +8,9 @@ namespace ElasticPMTServer.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly IRepository<User> _userRepository;
+        private readonly IUserRepository _userRepository;
 
-        public UsersController(IRepository<User> userRepository)
+        public UsersController(IUserRepository userRepository)
         {
             _userRepository = userRepository;
         }

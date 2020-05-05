@@ -9,9 +9,9 @@ namespace ElasticPMTServer.Controllers
     public class RequirementsController : ControllerBase
     {
 
-        private readonly IRepository<Requirement> _requirementRepository;
+        private readonly IRequirementRepository _requirementRepository;
 
-        public RequirementsController(IRepository<Requirement> requirementRepository)
+        public RequirementsController(IRequirementRepository requirementRepository)
         { 
             _requirementRepository = requirementRepository;
         }

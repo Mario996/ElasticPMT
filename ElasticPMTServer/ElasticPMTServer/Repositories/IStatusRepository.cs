@@ -1,5 +1,4 @@
-﻿using Nest;
-using Status = ElasticPMTServer.Models.Status;
+﻿using Status = ElasticPMTServer.Models.Status;
 
 namespace ElasticPMTServer.Repositories
 {
