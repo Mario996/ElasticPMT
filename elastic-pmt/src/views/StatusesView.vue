@@ -130,7 +130,6 @@ export default {
             this.dialog = true
         },
         deleteStatus (item) {
-            console.log(item)
             const index = this.statuses.indexOf(item)
             // eslint-disable-next-line no-unused-expressions
             confirm('Are you sure you want to delete this status?') && this.statuses.splice(index, 1)

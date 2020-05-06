@@ -32,7 +32,7 @@
               </v-col>
               <v-col class="py-0">
                 <v-combobox
-                  v-model="task.labels"
+                  v-model="labels"
                   label="Labels"
                   multiple
                   chips />
@@ -251,11 +251,14 @@ export default {
         requirements: [],
         taskTypes: ['Bug', 'Story', 'Epic', 'Task', 'Subtask'],
         taskPriorities: ['Blocker', 'Critical', 'Major', 'Minor', 'Trivial'],
+        labels: [],
     }),
     created () {
         if (this.taskObject !== undefined) {
             this.mode = 'UPDATE'
             this.task = this.taskObject
+            console.log(this.task)
+            this.labels = this.task.labels.map(x => x.name)
         }
         usersService.getAllUsers()
             .then((response) => {
@@ -269,20 +272,19 @@ export default {
             .then((response) => {
                 this.requirements = response.map(x => x.source)
             })
-        this.task.labels = this.task.labels.map(x => x.name)
     },
     methods: {
         submitForm () {
             this.$refs.observer.validate().then((result) => {
                 if (result) {
                     if (this.mode === 'UPDATE') {
-                        this.task.labels = this.task.labels.map(x => { return { name: x, id: uuidv4() } })
+                        this.task.labels = this.labels.map(x => { return { name: x, id: uuidv4() } })
                         tasksService.updateTask(this.task, this.task.id)
                             .then(() => {
                                 router.push('/list-tasks')
                             })
                     } else {
-                        this.task.labels = this.task.labels.map(x => { return { name: x, id: uuidv4() } })
+                        this.task.labels = this.labels.map(x => { return { name: x, id: uuidv4() } })
                         tasksService.createTask(this.task)
                             .then(() => {
                                 router.push('/list-tasks')
@@ -293,18 +295,18 @@ export default {
         },
         addComment () {
             this.task.comments.push({ text: this.comment, id: uuidv4() })
-            tasksService.updateTask(this.task, this.task.id)
+            tasksService.updateComments(this.task.id, this.task.comments)
             this.comment = ''
         },
         updateComment (comment) {
             var commentIndexToBeUpdated = this.task.comments.findIndex(x => x.id === comment.id)
             this.task.comments.splice(commentIndexToBeUpdated, 1, comment)
-            tasksService.updateTask(this.task, this.task.id)
+            tasksService.updateComments(this.task.id, this.task.comments)
         },
         deleteComment (comment) {
             var commentIndexToBeDeleted = this.task.comments.findIndex(x => x.id === comment.id)
             this.task.comments.splice(commentIndexToBeDeleted, 1)
-            tasksService.updateTask(this.task, this.task.id)
+            tasksService.updateComments(this.task.id, this.task.comments)
         },
     },
 }

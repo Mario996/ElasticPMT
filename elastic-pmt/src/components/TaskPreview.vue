@@ -53,7 +53,7 @@ export default {
     }),
     methods: {
         openDetails () {
-            router.push({ name: 'task', params: { taskObject: this.task.objectValue, documentId: this.task.objectValue.id } })
+            router.push({ name: 'task', params: { taskObject: this.task.objectValue } })
         },
         deleteTask () {
             this.$emit('delete-task', this.task.objectValue.id)

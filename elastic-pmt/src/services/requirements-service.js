@@ -74,6 +74,20 @@ async function updateRequirement (requirement, id) {
         .then(response => response.json())
 }
 
+async function updateComments (id, comments) {
+    const requestOptions = {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(
+            comments,
+        ),
+    }
+    return fetch(`https://localhost:44332/requirements/comments/${id}`, requestOptions)
+        .then(response => response.json())
+}
+
 async function deleteRequirement (id) {
     const requestOptions = {
         method: 'DELETE',
@@ -91,5 +105,6 @@ export const requirementsService = {
     getAllRequirements,
     getRequirementById,
     deleteRequirement,
+    updateComments,
     updateRequirement,
 }

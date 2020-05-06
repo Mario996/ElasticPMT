@@ -1,6 +1,7 @@
 ﻿using ElasticPMTServer.Models;
 using ElasticPMTServer.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace ElasticPMTServer.Controllers
 {
@@ -49,6 +50,14 @@ namespace ElasticPMTServer.Controllers
         public IActionResult updateRequirement(string id, [FromBody] Requirement requirement)
         {
             var result = _requirementRepository.update(id, requirement);
+            return Ok(result);
+        }
+
+        // PUT: requirements/comments/{id}
+        [HttpPut("comments/{id}")]
+        public IActionResult updateComments(string id, [FromBody] List<Comment> comments)
+        {
+            var result = _requirementRepository.updateComments(id, comments);
             return Ok(result);
         }
 

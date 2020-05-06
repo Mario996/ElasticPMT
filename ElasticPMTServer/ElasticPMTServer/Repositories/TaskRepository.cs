@@ -1,6 +1,8 @@
 ﻿using Nest;
 using Task = ElasticPMTServer.Models.Task;
 using System.Collections.Generic;
+using ElasticPMTServer.Models;
+using System;
 
 namespace ElasticPMTServer.Repositories
 {
@@ -30,6 +32,13 @@ namespace ElasticPMTServer.Repositories
                 returnValue.Add(bucket.Key, bucket.DocCount);
             }
             return returnValue;
+        }
+
+        public UpdateResponse<Task> updateComments(string id, List<Comment> comments)
+        {
+            return  _elasticClient.Update<Task>(id, desc => desc
+                                 .Doc(new Task{ Comments = comments, Id = new Guid(id)})
+                                 .Refresh(Elasticsearch.Net.Refresh.True));
         }
     }
 }

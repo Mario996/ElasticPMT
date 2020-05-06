@@ -36,9 +36,6 @@ export default {
         deleteTask (id) {
             this.tasks = this.tasks.filter(x => x.objectValue.id !== id)
             tasksService.deleteTask(id)
-                .then((response) => {
-                    console.log(response)
-                })
         }
     },
 }

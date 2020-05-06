@@ -90,6 +90,20 @@ async function updateTask (task, id) {
         .then(response => response.json())
 }
 
+async function updateComments (id, comments) {
+    const requestOptions = {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(
+            comments,
+        ),
+    }
+    return fetch(`https://localhost:44332/tasks/comments/${id}`, requestOptions)
+        .then(response => response.json())
+}
+
 async function deleteTask (id) {
     const requestOptions = {
         method: 'DELETE',
@@ -108,5 +122,6 @@ export const tasksService = {
     getTaskById,
     deleteTask,
     updateTask,
+    updateComments,
     orderByCreator,
 }

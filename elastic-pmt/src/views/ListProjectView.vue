@@ -32,9 +32,6 @@ export default {
         deleteProject (id) {
             this.projects = this.projects.filter(x => x.objectValue.id !== id)
             projectsService.deleteProject(id)
-                .then((response) => {
-                    console.log(response)
-                })
         }
     },
 }

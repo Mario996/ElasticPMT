@@ -34,9 +34,6 @@ export default {
         deleteRequirement (id) {
             this.requirements = this.requirements.filter(x => x.objectValue.id !== id)
             requirementsService.deleteRequirement(id)
-                .then((response) => {
-                    console.log(response)
-                })
         }
     },
 }
