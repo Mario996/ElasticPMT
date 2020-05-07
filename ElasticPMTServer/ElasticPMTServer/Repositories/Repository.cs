@@ -19,7 +19,6 @@ namespace ElasticPMTServer.Repositories
                                 );
             _elasticClient = new ElasticClient(_settings);
             _indexName = indexName;
-            checkIfIndexExists();
         }
 
         public void checkIfIndexExists()
@@ -40,6 +39,7 @@ namespace ElasticPMTServer.Repositories
                             .Properties(ps => ps
                                     .Nested<Comment>(n => n
                                         .Name(nn => nn.Comments)
+                                        .AutoMap()
                                     )
                             )
                         ));
@@ -53,7 +53,11 @@ namespace ElasticPMTServer.Repositories
                            .Properties(ps => ps
                                    .Nested<Comment>(n => n
                                        .Name(nn => nn.Comments)
+                                       .AutoMap()
+                                   )
+                                   .Nested<Label>(n => n
                                        .Name(nn => nn.Labels)
+                                       .AutoMap()
                                    )
                            )
                        ));
@@ -72,6 +76,7 @@ namespace ElasticPMTServer.Repositories
 
         public IndexResponse create(TEntity document)
         {
+            checkIfIndexExists();
             return _elasticClient.Index(document, i => i
                     .Refresh(Elasticsearch.Net.Refresh.True));
         }

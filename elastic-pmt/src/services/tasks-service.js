@@ -20,7 +20,19 @@ async function orderByCreator () {
         }
     }
 
-    return fetch('https://localhost:44332/tasks/reports/orderbycreator', requestOptions)
+    return fetch('https://localhost:44332/tasks/reports/order-by-creator', requestOptions)
+        .then(response => response.json())
+}
+
+async function orderRequirementsByNumberOfTasks () {
+    const requestOptions = {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }
+
+    return fetch('https://localhost:44332/tasks/reports/requirements-per-tasks-created', requestOptions)
         .then(response => response.json())
 }
 
@@ -124,4 +136,5 @@ export const tasksService = {
     updateTask,
     updateComments,
     orderByCreator,
+    orderRequirementsByNumberOfTasks,
 }

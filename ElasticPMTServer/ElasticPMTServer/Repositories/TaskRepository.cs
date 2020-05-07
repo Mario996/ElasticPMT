@@ -11,6 +11,29 @@ namespace ElasticPMTServer.Repositories
         public TaskRepository() : base("tasks")
         { }
 
+        public Dictionary<string, long?> orderRequirementsPerTasksCreated()
+        {
+            // key is requirement name, value is number of created tasks for that requirement
+            Dictionary<string, long?> returnValue = new Dictionary<string, long?>();
+            var query = @"
+                        {
+                          ""aggs"" : {
+                                ""requirements"" : {
+                                        ""terms"" : {
+                                            ""field"" : ""requirement.name.keyword""
+                                        }
+                                }
+                           }
+                         }";
+
+            var result = _elasticClient.LowLevel.Search<SearchResponse<Task>>(query).Aggregations.Terms("requirements");
+            foreach (KeyedBucket<string> bucket in result.Buckets)
+            {
+                returnValue.Add(bucket.Key, bucket.DocCount);
+            }
+            return returnValue;
+        }
+
         public Dictionary<string, long?> orderTasksPerCreator()
         {
             // key is email, value is number of occurances

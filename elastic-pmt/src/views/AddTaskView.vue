@@ -257,7 +257,6 @@ export default {
         if (this.taskObject !== undefined) {
             this.mode = 'UPDATE'
             this.task = this.taskObject
-            console.log(this.task)
             this.labels = this.task.labels.map(x => x.name)
         }
         usersService.getAllUsers()

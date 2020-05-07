@@ -33,11 +33,20 @@ namespace ElasticPMTServer.Controllers
             return Ok(result);
         }
 
-        // GET: tasks/reports/orderbycreator
-        [HttpGet("reports/orderbycreator")]
+        // GET: tasks/reports/order-by-creator
+        [HttpGet("reports/order-by-creator")]
         public IActionResult OrderTasksByCreator()
         {
             var result = _taskRepository.orderTasksPerCreator();
+
+            return Ok(result);
+        }
+
+        // GET: tasks/reports/requirements-per-tasks-created
+        [HttpGet("reports/requirements-per-tasks-created")]
+        public IActionResult OrderRequirementsByTasksCreated()
+        {
+            var result = _taskRepository.orderRequirementsPerTasksCreated();
 
             return Ok(result);
         }

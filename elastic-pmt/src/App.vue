@@ -25,6 +25,13 @@
         dark
         text
         class="mr-2"
+        @click="openReportsPage">
+        Reports
+      </v-btn>
+      <v-btn
+        dark
+        text
+        class="mr-2"
         @click="openPrioritiesPage">
         Priorities
       </v-btn>
@@ -141,6 +148,9 @@ export default {
         },
         openPrioritiesPage () {
             router.push('/priorities')
+        },
+        openReportsPage () {
+            router.push('/reports')
         },
         goHome () {
             router.push('/home')
