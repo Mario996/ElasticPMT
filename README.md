@@ -1,7 +1,7 @@
 Steps to get the project up and running are below, should be done from top to bottom:
 
 # Setup ElasticSearch
-1. Download and install ElasticSearch 7.6.2 from: https://www.elastic.co/downloads/elasticsearch
+1. Download and install ElasticSearch 7.6.2 from: https://www.elastic.co/downloads/past-releases/elasticsearch-7-6-2
 2. Run ElasticSearch by running elasticsearch.bat found in bin folder (should be on port 9200, which is the default)
 
 # Setup ElasticPMTServer
