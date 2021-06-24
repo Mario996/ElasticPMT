@@ -1,5 +1,6 @@
 ﻿using ElasticPMTServer.Models;
 using ElasticPMTServer.Repositories;
+using ElasticPMTServer.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -27,6 +28,7 @@ namespace ElasticPMTServer
             services.AddSingleton<IStatusRepository, StatusRepository>();
             services.AddSingleton<IProjectRepository, ProjectRepository>();
             services.AddSingleton<IPriorityRepository, PriorityRepository>();
+            services.AddSingleton<ISearchService, SearchService>();
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy",
@@ -34,7 +36,8 @@ namespace ElasticPMTServer
                         .AllowAnyMethod()
                         .AllowCredentials()
                         .SetIsOriginAllowed((host) => true)
-                        .AllowAnyHeader());
+                        .AllowAnyHeader()
+                        .WithOrigins("http://localhost:8080"));
             });
         }
 

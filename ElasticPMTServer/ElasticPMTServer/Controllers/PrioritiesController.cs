@@ -1,5 +1,6 @@
 ﻿using ElasticPMTServer.Models;
 using ElasticPMTServer.Repositories;
+using ElasticPMTServer.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ElasticPMTServer.Controllers
@@ -9,10 +10,12 @@ namespace ElasticPMTServer.Controllers
     public class PrioritiesController : ControllerBase
     {
         private readonly IPriorityRepository _priorityRepository;
+        private readonly ISearchService _searchService;
 
-        public PrioritiesController(IPriorityRepository priorityRepository)
+        public PrioritiesController(IPriorityRepository priorityRepository, ISearchService searchService)
         {
             _priorityRepository = priorityRepository;
+            _searchService = searchService;
         }
 
         // GET: priorities
@@ -28,6 +31,14 @@ namespace ElasticPMTServer.Controllers
         public IActionResult GetPriorityById(string id)
         {
             var result = _priorityRepository.getById(id);
+            return Ok(result);
+        }
+
+        // GET: priorities/{id}
+        [HttpPost("search")]
+        public IActionResult Search([FromBody] SearchObject searchValue)
+        {
+            var result = _searchService.Autocomplete(searchValue.Query, 5);
             return Ok(result);
         }
 

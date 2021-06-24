@@ -84,15 +84,22 @@
         </template>
       </v-data-table>
     </v-col>
+    <v-col>
+      <v-textarea type="text"
+               v-model="search"
+               @input="searchControls" />
+    </v-col>
   </v-row>
 </template>
 
 <script>
 import { prioritiesService } from '../services/priorities-service'
+import { searchService } from '../services/search-service'
 
 export default {
     data: () => ({
         dialog: false,
+        search: '',
         headers: [
             {
                 text: 'Name',
@@ -161,6 +168,11 @@ export default {
             }
             this.close()
         },
+        searchControls () {
+            searchService.search(this.search).then((response) => {
+                console.log(response)
+            })
+        }
     },
 }
 </script>
