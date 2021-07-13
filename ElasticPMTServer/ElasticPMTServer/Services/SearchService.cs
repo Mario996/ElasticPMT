@@ -22,20 +22,34 @@ namespace ElasticPMTServer.Services
 
             _elasticJsonClient = new ElasticClient(_settingsJson);
         }
-        public IEnumerable<string> Autocomplete(string query, int count)
+        public IEnumerable<CustomControl> Autocomplete(string query, int count)
         {
-            var result = _elasticJsonClient.Search<CustomControl>(x => x
-            .Suggest(su => su
-                        .Completion("custom-control-suggestions", c => c 						
-                            .Field(f => f.Suggest)	
-                            .Prefix(query)
-                            .Fuzzy(f => f
-                    .Fuzziness(Fuzziness.Auto)
-                    )
-                            .Size(count))));            
+            if (query != null)
+            {
+                //var result = _elasticJsonClient.Search<CustomControl>(x => x
+                //                    .Suggest(su => su
+                //                        .Completion("custom-control-suggestions", c => c
+                //                            .Field(f => f.Suggest)
+                //                            .Prefix(query)
+                //                            .Fuzzy(f => f
+                //                        .Fuzziness(Fuzziness.Auto))
+                //                        .Size(count))));
+                var result = _elasticJsonClient.Search<CustomControl>(x => x
+                                    .Query(q => q
+                                    .Match(m => m.Field(
+                                        f => f.PartProse)
+                                    .Query(query)))
+                                    .Size(count));
 
-            return result.Suggest["custom-control-suggestions"].SelectMany(x => x.Options)
-            .Select(y => y.Text);
+                return result.Documents;
+                //return result.Suggest["custom-control-suggestions"].SelectMany(x => x.Options)
+                //.Select(y => y.Source);
+            }
+            else
+            {
+                return Enumerable.Empty<CustomControl>();
+            }
+
         }
     }
 }

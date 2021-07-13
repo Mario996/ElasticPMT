@@ -9,7 +9,7 @@
         :headers="headers"
         :items="statuses"
         class="elevation-1">
-        <template v-slot:top>
+        <template #top>
           <v-toolbar flat
                      color="white">
             <v-toolbar-title>Status of tasks</v-toolbar-title>
@@ -20,7 +20,7 @@
             <v-spacer />
             <v-dialog v-model="dialog"
                       max-width="500px">
-              <template v-slot:activator="{ on }">
+              <template #activator="{ on }">
                 <v-btn color="primary"
                        dark
                        class="mb-2"
@@ -63,7 +63,7 @@
             </v-dialog>
           </v-toolbar>
         </template>
-        <template v-slot:item.actions="{ item }">
+        <template>
           <v-icon
             small
             class="mr-2"

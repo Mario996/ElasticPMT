@@ -2,14 +2,66 @@
   <v-row align="center"
          justify="center">
     <v-col
-      sm="8"
-      md="6"
-      lg="4">
+      sm="10"
+      md="8"
+      lg="8">
+      <v-card
+      color="red lighten-2"
+      light>
+      <v-card-title class="text-h5 red lighten-3">
+        Search for security rules
+      </v-card-title>
+      <v-card-text>
+        <v-autocomplete
+          v-model="chosenRequirement"
+          :items="searchResults"
+          :loading="isLoading"
+          :search-input.sync="search"
+          color="black"
+          hide-no-data
+          hide-selected
+          item-text="partProse"
+          item-value="partId"
+          label="Security requirements"
+          placeholder="Start typing to Search"
+          prepend-icon="mdi-database-search"
+          return-object />
+      </v-card-text>
+      <v-divider />
+      <v-expand-transition>
+        <v-list
+          v-if="chosenRequirement"
+          class="red lighten-3">
+          <v-list-item
+            v-for="(field, i) in fields"
+            :key="i">
+            <v-list-item-content>
+              <v-list-item-title v-text="field.key" />
+              <v-list-item-subtitle class="text-wrap"
+                                    style="font-weight: bold;"
+                                    v-text="field.value" />
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+      </v-expand-transition>
+      <v-card-actions>
+        <v-spacer />
+        <v-btn
+          :disabled="!chosenRequirement"
+          color="white darken-3"
+          @click="chosenRequirement = null">
+          Clear
+          <v-icon right>
+            mdi-close-circle
+          </v-icon>
+        </v-btn>
+      </v-card-actions>
+    </v-card>
       <v-data-table
         :headers="headers"
         :items="priorities"
         class="elevation-1">
-        <template v-slot:top>
+        <template #top>
           <v-toolbar flat
                      color="white">
             <v-toolbar-title>Priority of requirements</v-toolbar-title>
@@ -20,7 +72,7 @@
             <v-spacer />
             <v-dialog v-model="dialog"
                       max-width="500px">
-              <template v-slot:activator="{ on }">
+              <template #activator="{ on }">
                 <v-btn color="primary"
                        dark
                        class="mb-2"
@@ -69,7 +121,7 @@
             </v-dialog>
           </v-toolbar>
         </template>
-        <template v-slot:item.actions="{ item }">
+        <template>
           <v-icon
             small
             class="mr-2"
@@ -84,11 +136,9 @@
         </template>
       </v-data-table>
     </v-col>
-    <v-col>
-      <v-textarea type="text"
-               v-model="search"
-               @input="searchControls" />
-    </v-col>
+      <!--v-textarea v-model="search"
+                  type="text"
+                  @input="searchControls" /-->
   </v-row>
 </template>
 
@@ -100,6 +150,10 @@ export default {
     data: () => ({
         dialog: false,
         search: '',
+        searchResults: [],
+        chosenRequirement: '',
+        isLoading: false,
+        count: 0,
         headers: [
             {
                 text: 'Name',
@@ -126,11 +180,49 @@ export default {
         formTitle () {
             return this.editedIndex === -1 ? 'New Priority' : 'Edit Priority'
         },
+        fields () {
+            if (!this.chosenRequirement) return []
+
+            return Object.keys(this.chosenRequirement).map(key => {
+                if (key === 'suggest') {
+                    return {
+                        key: null,
+                        value: null
+                    }
+                }
+                return {
+                    key: this.transformKeyName(key),
+                    value: this.chosenRequirement[key] || 'n/a',
+                }
+            })
+        },
     },
     watch: {
         dialog (val) {
             // eslint-disable-next-line no-unused-expressions
             val || this.close()
+        },
+        search (val) {
+            // Items have already been requested
+            if (this.isLoading) return
+
+            this.isLoading = true
+            searchService.search(this.search).then((response) => {
+                this.searchResults = response.map((result) => {
+                    return {
+                        controlClass: result.controlClass,
+                        controlId: result.controlId,
+                        controlTitle: result.controlTitle,
+                        groupTitle: result.groupTitle,
+                        partId: result.partId,
+                        partProse: result.partProse
+                    }
+                })
+                this.count = response.count
+            }).catch(err => {
+                console.log(err)
+            })
+                .finally(() => (this.isLoading = false))
         },
     },
     created () {
@@ -170,8 +262,33 @@ export default {
         },
         searchControls () {
             searchService.search(this.search).then((response) => {
-                console.log(response)
+                this.searchResults = response.map((result) => {
+                    return {
+                        controlClass: result.controlClass,
+                        controlId: result.controlId,
+                        controlTitle: result.controlTitle,
+                        groupTitle: result.groupTitle,
+                        partId: result.partId,
+                        partProse: result.partProse
+                    }
+                })
+                console.log(this.searchResults)
             })
+        },
+        transformKeyName (key) {
+            if (key === 'groupTitle') {
+                return 'Group title'
+            } else if (key === 'controlId') {
+                return 'Control id'
+            } else if (key === 'controlClass') {
+                return 'Control class'
+            } else if (key === 'controlTitle') {
+                return 'Control title'
+            } else if (key === 'partId') {
+                return 'Part id'
+            } else if (key === 'partProse') {
+                return 'Part prose'
+            }
         }
     },
 }

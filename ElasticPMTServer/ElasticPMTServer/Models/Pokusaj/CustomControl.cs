@@ -13,9 +13,9 @@ namespace ElasticPMTServer.Models.Pokusaj
         public string ControlClass { get; set; }
         public string ControlTitle { get; set; }
         public string PartId { get; set; }
-        [Text]
+        [Text(Analyzer = "ngram_analyzer", SearchAnalyzer = "ngram_analyzer")]
         public string PartProse { get; set; }
-        [Completion(MaxInputLength = 5000)]
+        [Completion(MaxInputLength = 5000, Analyzer = "ngram_analyzer", SearchAnalyzer = "ngram_analyzer")]
         public CompletionField Suggest { get; set; }
 
 

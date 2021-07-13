@@ -2,15 +2,15 @@ async function search (query) {
     const requestOptions = {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            query: query,
+            query,
         }),
     }
 
     return fetch('https://localhost:44332/priorities/search', requestOptions)
-        .then(response => response.json())
+        .then((response) => response.json())
 }
 
 export const searchService = {

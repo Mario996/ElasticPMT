@@ -41,13 +41,13 @@ namespace ElasticPMTServer.Repositories
 
         public void checkIfIndexExists()
         {
-           if(_elasticClient.Indices.Exists(_indexName).Exists)
-           {
+            if (_elasticClient.Indices.Exists(_indexName).Exists)
+            {
                 return;
-           }
+            }
 
-           switch(_indexName)
-           {
+            switch (_indexName)
+            {
                 case "requirements":
                     _elasticClient.Indices.Create(_indexName, c => c
                         .Settings(s => s
@@ -89,16 +89,40 @@ namespace ElasticPMTServer.Repositories
                                                     )
                                                 );
                     break;
-           }         
+            }
         }
 
         public IndexResponse create(TEntity document)
         {
             var json = File.ReadAllText("C:\\Users\\Mario\\Desktop\\NIST-LOW-BASELINE-PROFILE.json");
-            _elasticJsonClient.Indices.Create("jsonindex", c => c
-                       .Settings(s => s
-                           .NumberOfShards(1))
-                       .Map<CustomControl>(m => m.AutoMap()));
+            //_elasticJsonClient.Indices.Create("jsonindex", c => c
+            //           .Settings(s => s
+            //               .NumberOfShards(1))
+            //           .Map<CustomControl>(m => m.AutoMap()));
+            var createIndexResponse = _elasticJsonClient.Indices.Create("jsonindex", c => c
+                                                        .Settings(st => st
+                                                            .Setting(UpdatableIndexSettings.MaxNGramDiff, 7)
+                                                            .Analysis(an => an
+                                                                .Analyzers(anz => anz
+                                                                    .Custom("ngram_analyzer", na => na
+                                                                    .Tokenizer("ngram_tokenizer")
+                                                                    .Filters("lowercase"))
+                                                                    )
+                                                                .Tokenizers(tz => tz
+                                                                    .NGram("ngram_tokenizer", td => td
+                                                                        .MinGram(3)
+                                                                        .MaxGram(9)
+                                                                        .TokenChars(
+                                                                            TokenChar.Letter,
+                                                                            TokenChar.Digit,
+                                                                            TokenChar.Symbol
+                                                                        )
+                                                                    )
+                                                                )
+                                                            )
+                                                        )
+                                                         .Map<CustomControl>(m => m.AutoMap())
+                                                    );
             Root root = JsonConvert.DeserializeObject<Root>(json);
 
             foreach (Group group in root.Catalog.Groups)
@@ -109,25 +133,66 @@ namespace ElasticPMTServer.Repositories
                     string controlId = control.Id;
                     string controlClass = control.Class;
                     string controlTitle = control.Title;
-                    foreach(Part part in control.Parts)
+                    foreach (Part part in control.Parts)
                     {
-                        if(part.Parts != null)
+                        if (part.Parts != null)
                         {
-                            foreach(Part innerPart in part.Parts)
+                            foreach (Part innerPart in part.Parts)
                             {
-                                string partId = innerPart.Id;
-                                string partProse = innerPart.Prose;
-                                CustomControl newControl = new CustomControl(groupTitle, controlId, controlClass, controlTitle, partId, partProse);
-                                _elasticJsonClient.Index(newControl, i => i.Index("jsonindex"));
+                                if(innerPart.Parts != null)
+                                {
+                                    foreach (Part doubleInnerPart in innerPart.Parts)
+                                    {
+                                        if (doubleInnerPart.Parts != null)
+                                        {
+                                            foreach (Part tripleInnerPart in doubleInnerPart.Parts)
+                                            {
+                                                if(tripleInnerPart.Parts != null)
+                                                {
+                                                    foreach (Part quadrupleInnerPart in tripleInnerPart.Parts)
+                                                    {
+                                                        string partId = quadrupleInnerPart.Id;
+                                                        string partProse = quadrupleInnerPart.Prose;
+                                                        CustomControl newControl = new CustomControl(groupTitle, controlId, controlClass, controlTitle, partId, partProse);
+                                                        var response = _elasticJsonClient.Index(newControl, i => i.Index("jsonindex"));                                                
+                                                    }
+                                                } else
+                                                {
+                                                    string partId = tripleInnerPart.Id;
+                                                    string partProse = tripleInnerPart.Prose;
+                                                    CustomControl newControl = new CustomControl(groupTitle, controlId, controlClass, controlTitle, partId, partProse);
+                                                    _elasticJsonClient.Index(newControl, i => i.Index("jsonindex"));
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            string partId = doubleInnerPart.Id;
+                                            string partProse = doubleInnerPart.Prose;
+                                            CustomControl newControl = new CustomControl(groupTitle, controlId, controlClass, controlTitle, partId, partProse);
+                                            var response = _elasticJsonClient.Index(newControl, i => i.Index("jsonindex"));
+                                            Console.WriteLine(response.IsValid);
+                                        }
+                                    }
+                                } else 
+                                {
+                                    string partId = innerPart.Id;
+                                    string partProse = innerPart.Prose;
+                                    CustomControl newControl = new CustomControl(groupTitle, controlId, controlClass, controlTitle, partId, partProse);
+                                    var response = _elasticJsonClient.Index(newControl, i => i.Index("jsonindex"));
+                                    Console.WriteLine(response.IsValid);
+                                }
                             }
-                        } else
+                        }
+                        else
                         {
                             string partId = part.Id;
                             string partProse = part.Prose;
                             CustomControl newControl = new CustomControl(groupTitle, controlId, controlClass, controlTitle, partId, partProse);
-                            _elasticJsonClient.Index(newControl, i => i.Index("jsonindex"));
+                            var response = _elasticJsonClient.Index(newControl, i => i.Index("jsonindex"));
+                            Console.WriteLine(response.IsValid);
                         }
-                    }                
+                    }
                 }
             }
             checkIfIndexExists();
